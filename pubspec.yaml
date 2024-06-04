@@ -29,6 +29,7 @@ dependencies:
   cached_network_image: ^3.2.3
   flutter_html: ^3.0.0-beta.2
   url_launcher: ^6.1.10
+  dropdown_button2: ^2.3.9
 dev_dependencies:
   flutter_test:
     sdk: flutter

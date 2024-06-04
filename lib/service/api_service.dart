@@ -38,6 +38,8 @@ class ApiService extends GetConnect {
     String experience,
     String addressLine,
     String pincode,
+    String state,
+    String city,
   ) async {
     http.Response response;
     var result = await ApiClient.postData(ApiUrl.register, body: {
@@ -50,6 +52,8 @@ class ApiService extends GetConnect {
       'experience': experience,
       'address_line_1': addressLine,
       'pincode': pincode,
+      'state': state,
+      'city': city,
     });
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
@@ -232,6 +236,8 @@ class ApiService extends GetConnect {
     String experience,
     String businessName,
     String alternateMobile,
+    String state,
+    String city,
   ) async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
@@ -248,6 +254,8 @@ class ApiService extends GetConnect {
       'experience': experience,
       'business_name': businessName,
       'alternate_mobile': alternateMobile,
+      'state': state,
+      'city': city,
     });
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
@@ -382,6 +390,38 @@ class ApiService extends GetConnect {
       'booking_id': bookingId,
       'otp': otp,
     });
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+  static Future<http.Response> statesList() async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString("currentToken");
+    var result = await ApiClient.postData(
+      ApiUrl.statesList,
+      headers: {
+        "Authorization": "Bearer$token",
+      },
+      body: {
+        'country_id': "105",
+      },
+    );
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+  static Future<http.Response> cityListGet(String stateId) async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString("currentToken");
+    var result = await ApiClient.postData(
+      ApiUrl.cityList,
+      headers: {
+        "Authorization": "Bearer$token",
+      },
+      body: {
+        'state_id': stateId,
+      },
+    );
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }

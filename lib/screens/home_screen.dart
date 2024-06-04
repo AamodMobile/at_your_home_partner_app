@@ -1,7 +1,9 @@
 import 'package:at_your_home_partner/constants/constants.dart';
 import 'package:at_your_home_partner/controller/booking_list_controller.dart';
 import 'package:at_your_home_partner/controller/user_controller.dart';
+import 'package:at_your_home_partner/core/common_widgets/custom_buttons.dart';
 import 'package:at_your_home_partner/model/booking_list_model.dart';
+import 'package:at_your_home_partner/screens/create_service_screen.dart';
 import 'package:at_your_home_partner/screens/drawer_screen.dart';
 import 'package:at_your_home_partner/screens/notification_screen.dart';
 import 'package:at_your_home_partner/screens/payment_and_patient_details_screen.dart';
@@ -275,7 +277,28 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             ),
                           ),
+                SizedBox(height: 70.h),
               ],
+            ),
+            bottomSheet: Container(
+              color: lightFillCl,
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.symmetric(horizontal: 60.w, vertical: 15.h),
+              child: Wrap(
+                children: [
+                  SizedBox(
+                    height: 43.h,
+                    child: CustomButtonWidget(
+                      padding: EdgeInsets.zero,
+                      style: CustomButtonStyle.style2,
+                      onPressed: () {
+                        Get.to(() => const CreateServiceScreen());
+                      },
+                      text: 'Create Service',
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -370,8 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(width: 13.w),
                   Expanded(
                     child: Text(
-                        bookingData.addressDetails!=null?
-                      bookingData.addressDetails!.addressLine1.toString():"",
+                      bookingData.addressDetails != null ? bookingData.addressDetails!.addressLine1.toString() : "",
                       style: TextStyle(
                         color: blackCl,
                         fontStyle: FontStyle.normal,

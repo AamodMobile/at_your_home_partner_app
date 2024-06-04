@@ -22,5 +22,7 @@ class ApiUrl {
   static const String vendorNotificationList = "${baseUrl}vendor/notification-list";
   static const String vendorStartBooking = "${baseUrl}vendor/start_booking";
   static const String vendorBookingOtp = "${baseUrl}vendor/booking-otp";
+  static const String statesList = "${baseUrl}vendor/states";
+  static const String cityList = "${baseUrl}vendor/city";
 
 }

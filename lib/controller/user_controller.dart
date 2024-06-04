@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:at_your_home_partner/constants/constants.dart';
+import 'package:at_your_home_partner/model/city_model.dart';
+import 'package:at_your_home_partner/model/state_model.dart';
 import 'package:at_your_home_partner/model/user_model.dart';
 import 'package:at_your_home_partner/screens/login_screen.dart';
 import 'package:at_your_home_partner/service/api_logs.dart';
@@ -15,6 +17,12 @@ class UserController extends GetxController implements GetxService {
   TextEditingController confirmPassword = TextEditingController();
   Rx<File> profileImage = File("").obs;
   var userData = UserData().obs;
+  var cityList = <CityModel>[].obs;
+  var stateList = <StateModel>[].obs;
+  var cityModel;
+  var stateModel;
+  String stateId = "0";
+  String cityId = "0";
 
   Future<void> vendorChangePassword() async {
     try {
@@ -65,7 +73,8 @@ class UserController extends GetxController implements GetxService {
   ) async {
     try {
       showProgress();
-      var result = await ApiService.updateProfile(name, addressLine1, pincode, experience, businessName, alternateMobile);
+      var result = await ApiService.updateProfile(name, addressLine1, pincode, experience, businessName, alternateMobile, stateModel.label.toString(),
+        cityModel.label.toString(),);
       var json = jsonDecode(result.body);
       final apiResponse = UserModel.fromJson(json);
       if (apiResponse.status == true) {
@@ -194,12 +203,61 @@ class UserController extends GetxController implements GetxService {
         closeProgress();
         var model = UserData.fromJson(json["data"]);
         userData.value = model;
+        stateId = userData.value.state.toString();
+        cityId = userData.value.city.toString();
+        statesList();
       } else {
         closeProgress();
         errorToast(json["message"].toString());
       }
-  } catch (e) {
-    closeProgress();
+    } catch (e) {
+      closeProgress();
+      Log.console(e.toString());
+    }
+    update();
+  }
+
+  Future<void> statesList() async {
+    try {
+      stateModel = null;
+      cityModel = null;
+      stateList.clear();
+      var result = await ApiService.statesList();
+      var json = jsonDecode(result.body);
+      if (json["status"] == true) {
+        stateList.value = List<StateModel>.from(json['data'].map((i) => StateModel.fromJson(i))).toList(growable: true);
+        for (var c in stateList) {
+          if (c.value == stateId) {
+            stateModel = c;
+            cityListGet(stateModel.value.toString());
+            break;
+          }
+        }
+      } else {
+      }
+    } catch (e) {
+      Log.console(e.toString());
+    }
+    update();
+  }
+
+  Future<void> cityListGet(String stateID) async {
+    try {
+      cityModel = null;
+      cityList.clear();
+      var result = await ApiService.cityListGet(stateID);
+      var json = jsonDecode(result.body);
+      if (json["status"] == true) {
+        cityList.value = List<CityModel>.from(json['data'].map((i) => CityModel.fromJson(i))).toList(growable: true);
+        for (var c in cityList) {
+          if (c.value == cityId) {
+            cityModel = c;
+            break;
+          }
+        }
+      } else {
+      }
+    } catch (e) {
       Log.console(e.toString());
     }
     update();

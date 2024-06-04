@@ -73,7 +73,7 @@ const walletD = "assets/icons/wallet_d.png";
 const bankIC = "assets/icons/bank.png";
 const iosBackIc = "assets/icons/ios_back_ic.png";
 const redLightGif = "assets/icons/red_light.gif";
-
+const arrowDropDown = "assets/icons/angle_down.png";
 //images
 const splash = "assets/images/splash.png";
 const loginBg = "assets/images/login_bg.png";

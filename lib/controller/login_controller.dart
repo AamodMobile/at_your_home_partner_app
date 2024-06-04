@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:at_your_home_partner/constants/constants.dart';
+import 'package:at_your_home_partner/model/city_model.dart';
+import 'package:at_your_home_partner/model/state_model.dart';
 import 'package:at_your_home_partner/model/user_model.dart';
 import 'package:at_your_home_partner/screens/create_new_password_screen.dart';
 import 'package:at_your_home_partner/screens/login_screen.dart';
@@ -26,7 +28,10 @@ class LoginController extends GetxController implements GetxService {
   var otp = "";
   TextEditingController passwordNew = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
-
+  var cityList = <CityModel>[].obs;
+  var stateList = <StateModel>[].obs;
+  var cityModel;
+  var stateModel;
   Future<void> login() async {
     try {
       showProgress();
@@ -72,6 +77,8 @@ class LoginController extends GetxController implements GetxService {
         experience.text,
         addressLine.text,
         pinCode.text,
+        stateModel.label.toString(),
+        cityModel.label.toString(),
       );
       var json = jsonDecode(result.body);
       final apiResponse = UserModel.fromJson(json);
@@ -161,5 +168,38 @@ class LoginController extends GetxController implements GetxService {
       closeProgress();
       Log.console(e.toString());
     }
+  }
+  Future<void> statesList() async {
+    try {
+      stateModel = null;
+      cityModel = null;
+      stateList.clear();
+      var result = await ApiService.statesList();
+      var json = jsonDecode(result.body);
+      if (json["status"] == true) {
+        stateList.value = List<StateModel>.from(json['data'].map((i) => StateModel.fromJson(i))).toList(growable: true);
+      } else {
+        //errorToast(json["message"].toString());
+      }
+    } catch (e) {
+      Log.console(e.toString());
+    }
+    update();
+  }
+  Future<void> cityListGet(String stateID) async {
+    try {
+      cityModel = null;
+      cityList.clear();
+      var result = await ApiService.cityListGet(stateID);
+      var json = jsonDecode(result.body);
+      if (json["status"] == true) {
+        cityList.value = List<CityModel>.from(json['data'].map((i) => CityModel.fromJson(i))).toList(growable: true);
+      } else {
+        //errorToast(json["message"].toString());
+      }
+    } catch (e) {
+      Log.console(e.toString());
+    }
+    update();
   }
 }
