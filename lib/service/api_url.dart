@@ -6,7 +6,6 @@ class ApiUrl {
   static const String vendorOnOff = "${baseUrl}vendor/vendor_on_off";
   static const String vendorBooking = "${baseUrl}vendor/booking";
   static const String bookingDetails = "${baseUrl}vendor/booking-details";
-  static const String cancelledBooking = "${baseUrl}vendor/cancelled-booking";
   static const String vendorPasswordUpdate = "${baseUrl}vendor/vendor_password_update";
   static const String forgotPassword = "${baseUrl}vendor/forgot-password";
   static const String verifyOtp = "${baseUrl}vendor/forgot_verify_otp";
@@ -17,6 +16,7 @@ class ApiUrl {
   static const String vendorVendorDelete = "${baseUrl}vendor/vendor-delete";
   static const String vendorGetProfile = "${baseUrl}vendor/get-profile";
   static const String vendorBookingAccept = "${baseUrl}vendor/booking-accept";
+  static const String vendorCancelledBooking = "${baseUrl}vendor/cancelled-booking";
   static const String vendorAddBank = "${baseUrl}vendor/add-bank";
   static const String vendorListBank = "${baseUrl}vendor/list-bank";
   static const String vendorNotificationList = "${baseUrl}vendor/notification-list";
@@ -24,5 +24,19 @@ class ApiUrl {
   static const String vendorBookingOtp = "${baseUrl}vendor/booking-otp";
   static const String statesList = "${baseUrl}vendor/states";
   static const String cityList = "${baseUrl}vendor/city";
+  static const String allCategoryList = "${baseUrl}vendor/category";
+  static const String subCategoryList = "${baseUrl}vendor/sub-category";
+  static const String serviceList = "${baseUrl}vendor/service-list";
+  static const String createService = "${baseUrl}vendor/create-service";
+  static const String createTimeslots = "${baseUrl}vendor/create-timeslots";
+  static const String timeSlotsList = "${baseUrl}vendor/time-slots-list";
+  static const String paymentHistory = "${baseUrl}vendor/payment_history";
+  static const String myService = "${baseUrl}vendor/my-service";
+  static const String serviceDelete = "${baseUrl}vendor/service-delete";
+  static const String serviceDetails = "${baseUrl}vendor/service-details";
+  static const String startBooking = "${baseUrl}vendor/booking-otp";
+  static const String startBookingOtp = "${baseUrl}vendor/verify-booking-otp";
+  static const String endBooking = "${baseUrl}vendor/booking-otp";
+  static const String endBookingOtp = "${baseUrl}vendor/verify-booking-otp";
 
 }

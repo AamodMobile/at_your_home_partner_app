@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
             title: 'At Your Home Partner',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              colorScheme: ColorScheme.fromSeed(seedColor:mainColor),
               useMaterial3: true,
             ),
             home: const SplashScreen(),

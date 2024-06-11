@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:at_your_home_partner/model/user_model.dart';
 import 'package:at_your_home_partner/service/api_client.dart';
 import 'package:at_your_home_partner/service/api_logs.dart';
@@ -71,7 +72,7 @@ class ApiService extends GetConnect {
     return response;
   }
 
-  static Future<http.Response> vendorBooking() async {
+  static Future<http.Response> vendorBooking(String serviceId) async {
     http.Response response;
     var pref = await SharedPreferences.getInstance();
     var token = pref.getString('currentToken');
@@ -81,6 +82,7 @@ class ApiService extends GetConnect {
       'Authorization': 'Bearer $token',
     }, body: {
       'vendor_id': crtUser.data!.id.toString(),
+      'service_id': serviceId,
     });
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
@@ -102,21 +104,7 @@ class ApiService extends GetConnect {
     return response;
   }
 
-  static Future<http.Response> cancelledBooking(String bookingId) async {
-    http.Response response;
-    var instance = await SharedPreferences.getInstance();
-    var token = instance.getString('currentToken');
-    var crtData = instance.getString('currentUser');
-    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
-    var result = await ApiClient.postData(ApiUrl.cancelledBooking, headers: {
-      'Authorization': 'Bearer $token',
-    }, body: {
-      'user_id': crtUser.data!.id.toString(),
-      'booking_id': bookingId,
-    });
-    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
-    return response;
-  }
+
 
   static Future<http.Response> vendorChangePassword(
     String oldPassword,
@@ -307,7 +295,21 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
-
+  static Future<http.Response> vendorCancelledBooking(String bookingId) async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString('currentToken');
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(ApiUrl.vendorCancelledBooking, headers: {
+      'Authorization': 'Bearer $token',
+    }, body: {
+      'user_id': crtUser.data!.id.toString(),
+      'booking_id': bookingId,
+    });
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
   static Future<http.Response> vendorAddBank(
     String bankName,
     String ifscCode,
@@ -363,6 +365,7 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
+
   static Future<http.Response> vendorStartBooking() async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
@@ -377,7 +380,8 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
-  static Future<http.Response> vendorBookingOtp(String bookingId,String otp ) async {
+
+  static Future<http.Response> vendorBookingOtp(String bookingId, String otp) async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
     var token = instance.getString('currentToken');
@@ -393,6 +397,7 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
+
   static Future<http.Response> statesList() async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
@@ -409,10 +414,12 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
+
   static Future<http.Response> cityListGet(String stateId) async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
     var token = instance.getString("currentToken");
+
     var result = await ApiClient.postData(
       ApiUrl.cityList,
       headers: {
@@ -422,6 +429,302 @@ class ApiService extends GetConnect {
         'state_id': stateId,
       },
     );
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+
+  static Future<http.Response> allCategoryList() async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString("currentToken");
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(
+      ApiUrl.allCategoryList,
+      headers: {
+        "Authorization": "Bearer$token",
+      },
+      body: {
+        'vendor_id': crtUser.data!.id.toString(),
+      },
+    );
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+
+  static Future<http.Response> subCategoryList(String categoryId) async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString("currentToken");
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(
+      ApiUrl.subCategoryList,
+      headers: {
+        "Authorization": "Bearer$token",
+      },
+      body: {
+        'category_id': categoryId,
+      },
+    );
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+
+  static Future<http.Response> serviceList(String categoryId, String subcategoryId) async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString("currentToken");
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(
+      ApiUrl.serviceList,
+      headers: {
+        "Authorization": "Bearer$token",
+      },
+      body: {
+        'vendor_id': crtUser.data!.id.toString(),
+        'category_id': categoryId,
+        'subcategory_id': subcategoryId,
+      },
+    );
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+
+  ///createService
+  static Future<dynamic> createService(
+    var profileImage,
+    String categoryId,
+    String subcategoryId,
+    var serviceId,
+  ) async {
+    var result;
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var crtData = instance.getString('currentUser');
+    var token = instance.getString('currentToken');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    try {
+      var url = ApiUrl.createService;
+      Log.console('Http.Post Url: $url');
+      http.MultipartRequest request = http.MultipartRequest('POST', Uri.parse(url));
+      request.headers.addAll({
+        'Authorization': 'Bearer $token',
+      });
+      Log.console('Http.Post Headers: ${request.headers}');
+
+      request.fields['user_id'] = crtUser.data!.id.toString();
+      request.fields['category_id'] = categoryId;
+      request.fields['subcategory_id'] = subcategoryId;
+      if (profileImage.isNotEmpty) {
+        for (int i = 0; i < profileImage.length; i++) {
+          if (profileImage[i].toString() != "upload") {
+            final File file = File(profileImage[i].path);
+            http.MultipartFile file2 = await http.MultipartFile.fromPath("vendor_images", file.path.toString());
+            request.files.add(file2);
+          }
+        }
+      }
+      if (serviceId.isNotEmpty) {
+        for (int i = 0; i < serviceId.length; i++) {
+          request.fields['service_id[]'] = serviceId[i];
+        }
+      }
+      Log.console('Http.Post filed: ${request.fields}');
+      response = await http.Response.fromStream(await request.send());
+      Log.console('Http.Response Body: ${response.body}');
+      if (response.statusCode == 200) {
+        result = jsonDecode(response.body);
+      } else if (response.statusCode == 404) {
+        result = {'status_code': 400, 'message': '404'};
+      } else if (response.statusCode == 401) {
+        result = jsonDecode(response.body);
+      }
+    } catch (e) {
+      result = http.Response(
+        jsonEncode({e.toString()}),
+        204,
+        headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'},
+      );
+    }
+    return result;
+  }
+
+  static Future<http.Response> timeSlotsList() async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString("currentToken");
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(
+      ApiUrl.timeSlotsList,
+      headers: {
+        "Authorization": "Bearer$token",
+      },
+      body: {},
+    );
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+
+  static Future<http.Response> createTimeslots(String day, String timeSlots) async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString("currentToken");
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var requestBody = {
+      'user_id': crtUser.data!.id.toString(),
+      'day': day,
+      'time_slots[]':timeSlots
+
+    };
+    var result = await ApiClient.postData(
+      ApiUrl.createTimeslots,
+      headers: {
+        "Authorization": "Bearer $token",
+      },
+      body: requestBody,
+    );
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+  static Future<http.Response> paymentHistory() async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString("currentToken");
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(
+      ApiUrl.paymentHistory,
+      headers: {
+        "Authorization": "Bearer$token",
+      },
+      body: {
+        'user_id': crtUser.data!.id.toString(),
+      },
+    );
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+  static Future<http.Response> myService() async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString("currentToken");
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(
+      ApiUrl.myService,
+      headers: {
+        "Authorization": "Bearer$token",
+      },
+      body: {
+        'user_id': crtUser.data!.id.toString(),
+      },
+    );
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+  static Future<http.Response> serviceDelete(String serviceId) async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString("currentToken");
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(
+      ApiUrl.serviceDelete,
+      headers: {
+        "Authorization": "Bearer$token",
+      },
+      body: {
+        'user_id': crtUser.data!.id.toString(),
+        'service_id': serviceId,
+      },
+    );
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+  static Future<http.Response> serviceDetails(String serviceId) async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString("currentToken");
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(
+      ApiUrl.serviceDetails,
+      headers: {
+        "Authorization": "Bearer$token",
+      },
+      body: {
+        'user_id': crtUser.data!.id.toString(),
+        'service_id': serviceId,
+      },
+    );
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+  static Future<http.Response> startBooking(String bookingId) async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString('currentToken');
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(ApiUrl.startBooking, headers: {
+      'Authorization': 'Bearer $token',
+    }, body: {
+      'user_id': crtUser.data!.id.toString(),
+      'booking_id': bookingId,
+    });
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+  static Future<http.Response> startBookingOtp(String bookingId,String otp) async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString('currentToken');
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(ApiUrl.startBookingOtp, headers: {
+      'Authorization': 'Bearer $token',
+    }, body: {
+      'user_id': crtUser.data!.id.toString(),
+      'booking_id': bookingId,
+      'otp': otp,
+      'type': "start_otp",
+    });
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+  static Future<http.Response> endBooking(String bookingId) async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString('currentToken');
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(ApiUrl.endBooking, headers: {
+      'Authorization': 'Bearer $token',
+    }, body: {
+      'user_id': crtUser.data!.id.toString(),
+      'booking_id': bookingId,
+    });
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+  static Future<http.Response> endBookingOtp(String bookingId,String otp) async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString('currentToken');
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(ApiUrl.endBookingOtp, headers: {
+      'Authorization': 'Bearer $token',
+    }, body: {
+      'user_id': crtUser.data!.id.toString(),
+      'booking_id': bookingId,
+      'otp': otp,
+      'type': "end_otp",
+    });
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }

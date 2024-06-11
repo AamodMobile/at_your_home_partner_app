@@ -6,6 +6,7 @@ import 'package:at_your_home_partner/screens/chnage_password_screen.dart';
 import 'package:at_your_home_partner/screens/cms_screen.dart';
 import 'package:at_your_home_partner/screens/login_screen.dart';
 import 'package:at_your_home_partner/screens/my_income_screen.dart';
+import 'package:at_your_home_partner/screens/my_service_screen.dart';
 import 'package:at_your_home_partner/screens/profile_view.dart';
 import 'package:at_your_home_partner/service/api_url.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -86,7 +87,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                                         fit: BoxFit.fill,
                                         height: 90.h,
                                         width: 70.w,
-                                        imageUrl: ApiUrl.imageUrl+controller.userData.value.profileImage.toString(),
+                                        imageUrl: ApiUrl.imageUrl + controller.userData.value.profileImage.toString(),
                                         placeholder: (a, b) => const Center(
                                           child: CircularProgressIndicator(),
                                         ),
@@ -136,6 +137,15 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   ),
                 ),
                 SizedBox(height: 30.h),
+                contColumn(
+                  function: () {
+                    Get.back();
+                    Get.to(() => const MyServiceScreen());
+                  },
+                  assetImg: injectionIc,
+                  tittle: "My Service",
+                  isHide: false,
+                ),
                 contColumn(
                   function: () {
                     Get.back();

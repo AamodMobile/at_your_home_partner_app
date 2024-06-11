@@ -74,6 +74,7 @@ const bankIC = "assets/icons/bank.png";
 const iosBackIc = "assets/icons/ios_back_ic.png";
 const redLightGif = "assets/icons/red_light.gif";
 const arrowDropDown = "assets/icons/angle_down.png";
+const medicalKitIc = "assets/icons/medical_kit_ic.png";
 //images
 const splash = "assets/images/splash.png";
 const loginBg = "assets/images/login_bg.png";
@@ -102,4 +103,6 @@ const createPassImg = "assets/images/create_pass_img.png";
 const union = "assets/images/union.png";
 const bgAc = "assets/images/bg_ac.png";
 const noIncome = "assets/images/no_income.png";
+const demoPatientImg = "assets/images/demo_patient_img.png";
+const drDemoImg = "assets/images/dr_demo_img.png";
 

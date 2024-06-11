@@ -33,9 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     checkAvailability();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    /* WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getDialogAlert();
-    });
+    });*/
 
     super.initState();
   }
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return GetBuilder(
       init: Get.find<BookingListController>(),
       initState: (state) {
-        Get.find<BookingListController>().getBookingList().then((v) {
+        Get.find<BookingListController>().getBookingList("").then((v) {
           user.vendorGetProfile();
         });
       },
@@ -258,23 +258,72 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           )
                         : Expanded(
-                            child: ListView.builder(
-                              itemCount: (contextCtrl.selectedIndex == 0)
-                                  ? contextCtrl.bookingList.length
-                                  : (contextCtrl.selectedIndex == 1)
-                                      ? contextCtrl.pendingList.length
-                                      : (contextCtrl.selectedIndex == 2)
-                                          ? contextCtrl.completedList.length
-                                          : contextCtrl.cancelledList.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return itemBookingList((contextCtrl.selectedIndex == 0)
-                                    ? contextCtrl.bookingList[index]
-                                    : (contextCtrl.selectedIndex == 1)
-                                        ? contextCtrl.pendingList[index]
-                                        : (contextCtrl.selectedIndex == 2)
-                                            ? contextCtrl.completedList[index]
-                                            : contextCtrl.cancelledList[index]);
+                            child: RefreshIndicator(
+                              onRefresh: () {
+                                return Future.delayed(const Duration(seconds: 1), () {
+                                  contextCtrl.getBookingList("");
+                                });
                               },
+                              child: Builder(builder: (context) {
+                                if (contextCtrl.isLoading) {
+                                  return const SizedBox(
+                                    height: 400,
+                                    width: 400,
+                                    child: Center(
+                                        child: CircularProgressIndicator(
+                                      color: mainColor,
+                                    )),
+                                  );
+                                }
+                                List currentList;
+                                switch (contextCtrl.selectedIndex) {
+                                  case 0:
+                                    currentList = contextCtrl.bookingList;
+                                    break;
+                                  case 1:
+                                    currentList = contextCtrl.pendingList;
+                                    break;
+                                  case 2:
+                                    currentList = contextCtrl.completedList;
+                                    break;
+                                  case 3:
+                                    currentList = contextCtrl.cancelledList;
+                                    break;
+                                  default:
+                                    currentList = [];
+                                }
+                                if (currentList.isEmpty) {
+                                  return const Center(
+                                    child: Text('No items available'),
+                                  );
+                                }
+
+                                return ListView.builder(
+                                  itemCount: currentList.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return itemBookingList(currentList[index]);
+                                  },
+                                );
+
+                                /*  return ListView.builder(
+                                  itemCount: (contextCtrl.selectedIndex == 0)
+                                      ? contextCtrl.bookingList.length
+                                      : (contextCtrl.selectedIndex == 1)
+                                          ? contextCtrl.pendingList.length
+                                          : (contextCtrl.selectedIndex == 2)
+                                              ? contextCtrl.completedList.length
+                                              : contextCtrl.cancelledList.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return itemBookingList((contextCtrl.selectedIndex == 0)
+                                        ? contextCtrl.bookingList[index]
+                                        : (contextCtrl.selectedIndex == 1)
+                                            ? contextCtrl.pendingList[index]
+                                            : (contextCtrl.selectedIndex == 2)
+                                                ? contextCtrl.completedList[index]
+                                                : contextCtrl.cancelledList[index]);
+                                  },
+                                );*/
+                              }),
                             ),
                           ),
                 SizedBox(height: 70.h),

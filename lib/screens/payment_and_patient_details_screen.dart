@@ -20,6 +20,7 @@ class PaymentAndPatientDetailsScreen extends StatefulWidget {
 
 class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetailsScreen> {
   BookingListController controller = Get.put(BookingListController());
+  String otp = "";
 
   @override
   Widget build(BuildContext context) {
@@ -111,56 +112,58 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                           ),
                         ),
                         SizedBox(height: 10.h),
-                        SizedBox(
-                          height: 111,
-                          width: MediaQuery.of(context).size.width,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: ListView.builder(
-                              clipBehavior: Clip.none,
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              itemCount: 1,
-                              reverse: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => PrescriptionScreen(imageUrl: ApiUrl.imageUrl + contextCtr.bookingDetailsModel.value.prescription.toString()));
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(right: 9),
-                                    height: 111,
-                                    width: 111,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: mainColor, width: 1),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: contextCtr.bookingDetailsModel.value.prescription != ""
-                                          ? CachedNetworkImage(
-                                              errorWidget: (context, url, error) => Image.asset(
-                                                clientDemo,
-                                                fit: BoxFit.fill,
-                                                height: 90.h,
-                                                width: 70.w,
-                                              ),
-                                              fit: BoxFit.fill,
-                                              height: 90.h,
-                                              width: 70.w,
-                                              imageUrl: ApiUrl.imageUrl + contextCtr.bookingDetailsModel.value.prescription.toString(),
-                                              placeholder: (a, b) => const Center(
-                                                child: CircularProgressIndicator(),
-                                              ),
-                                            )
-                                          : Image.asset(slipImg, fit: BoxFit.cover),
-                                    ),
+                        contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage!.isEmpty
+                            ? const SizedBox()
+                            : SizedBox(
+                                height: 111,
+                                width: MediaQuery.of(context).size.width,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: ListView.builder(
+                                    clipBehavior: Clip.none,
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    itemCount: contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage?.length,
+                                    reverse: true,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => PrescriptionScreen(imageUrl: ApiUrl.imageUrl + contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage![index].image.toString()));
+                                        },
+                                        child: Container(
+                                          margin: const EdgeInsets.only(right: 9),
+                                          height: 111,
+                                          width: 111,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: mainColor, width: 1),
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage![index].image != ""
+                                                ? CachedNetworkImage(
+                                                    errorWidget: (context, url, error) => Image.asset(
+                                                      clientDemo,
+                                                      fit: BoxFit.fill,
+                                                      height: 90.h,
+                                                      width: 70.w,
+                                                    ),
+                                                    fit: BoxFit.fill,
+                                                    height: 90.h,
+                                                    width: 70.w,
+                                                    imageUrl: ApiUrl.imageUrl + contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage![index].image.toString(),
+                                                    placeholder: (a, b) => const Center(
+                                                      child: CircularProgressIndicator(),
+                                                    ),
+                                                  )
+                                                : Image.asset(slipImg, fit: BoxFit.cover),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
+                                ),
+                              ),
                         SizedBox(height: 14.h),
                         Container(
                           width: MediaQuery.of(context).size.width,
@@ -196,7 +199,7 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                                       ],
                                     ),
                                     Text(
-                                      contextCtr.bookingDetailsModel.value.userName.toString(),
+                                      contextCtr.bookingDetailsModel.value.patientDetails!.name.toString(),
                                       style: TextStyle(
                                         color: blackCl,
                                         fontStyle: FontStyle.normal,
@@ -239,7 +242,7 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                                       ],
                                     ),
                                     Text(
-                                      "${contextCtr.bookingDetailsModel.value.age.toString()} Years",
+                                      "${contextCtr.bookingDetailsModel.value.patientDetails!.age.toString()} Years",
                                       style: TextStyle(
                                         color: blackCl,
                                         fontStyle: FontStyle.normal,
@@ -283,7 +286,9 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                                       ],
                                     ),
                                     Text(
-                                      contextCtr.bookingDetailsModel.value.gender!.capitalizeFirst.toString(),
+                                      contextCtr.bookingDetailsModel.value.patientDetails!.gender != null
+                                          ? contextCtr.bookingDetailsModel.value.patientDetails!.gender!.capitalizeFirst.toString()
+                                          : "",
                                       style: TextStyle(
                                         color: blackCl,
                                         fontStyle: FontStyle.normal,
@@ -406,7 +411,7 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                                       SizedBox(width: 8.w),
                                       Expanded(
                                         child: Text(
-                                          contextCtr.bookingDetailsModel.value.addressDetails!.addressLine1!.toString(),
+                                          contextCtr.bookingDetailsModel.value.addressDetails != null ? contextCtr.bookingDetailsModel.value.addressDetails!.addressLine1!.toString() : "",
                                           style: TextStyle(
                                             color: blackCl,
                                             fontStyle: FontStyle.normal,
@@ -669,7 +674,7 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                           ),
                         ),
                         SizedBox(height: 20.h),
-                        contextCtr.bookingDetailsModel.value.status == "pending"
+                        contextCtr.bookingDetailsModel.value.status == "requested"
                             ? Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Row(
@@ -677,7 +682,7 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                                     Expanded(
                                       child: GestureDetector(
                                         onTap: () {
-                                          contextCtr.vendorBookingAccept(contextCtr.bookingDetailsModel.value.bookingId.toString(), "0");
+                                          contextCtr.vendorCancelledBooking(contextCtr.bookingDetailsModel.value.bookingId.toString());
                                         },
                                         child: Container(
                                           padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 10.h),
@@ -724,18 +729,95 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                                   ],
                                 ),
                               )
-                            : Container(
-                                height: 44,
-                                padding: const EdgeInsets.symmetric(horizontal: 35),
-                                child: CustomButtonWidget(
-                                  padding: EdgeInsets.zero,
-                                  style: CustomButtonStyle.style2,
-                                  onPressed: () {
-                                    otpDialogShow();
-                                  },
-                                  text: 'Booking Complete',
-                                ),
-                              ),
+                            : contextCtr.bookingDetailsModel.value.status == "cancelled"
+                                ? Align(
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
+                                      decoration: BoxDecoration(color: cancelCl, borderRadius: BorderRadius.circular(4), border: Border.all(color: cancelBorderCl, width: 0.5)),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(outlineCancel, height: 20.h, width: 20.w),
+                                          SizedBox(width: 15.w),
+                                          Text(
+                                            contextCtr.bookingDetailsModel.value.status.toString().capitalizeFirst!,
+                                            style: TextStyle(
+                                              color: cancelBorderCl,
+                                              fontStyle: FontStyle.normal,
+                                              fontSize: 18.sp,
+                                              fontFamily: semiBold,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : contextCtr.bookingDetailsModel.value.status == "pending"
+                                    ? Container(
+                                        height: 44,
+                                        padding: const EdgeInsets.symmetric(horizontal: 35),
+                                        child: CustomButtonWidget(
+                                          padding: EdgeInsets.zero,
+                                          style: CustomButtonStyle.style2,
+                                          onPressed: () async {
+                                            var result = await controller.startBooking(contextCtr.bookingDetailsModel.value.bookingId.toString());
+                                            if (result.isNotEmpty && result[0] == true) {
+                                              otp = "";
+                                              otpDialogShow("start", contextCtr.bookingDetailsModel.value.bookingId.toString());
+                                              successToast(result[1].toString());
+                                            } else {
+                                              errorToast(result.isNotEmpty ? result[1] : "Something went wrong");
+                                            }
+                                          },
+                                          text: 'Booking Start',
+                                        ),
+                                      )
+                                    : contextCtr.bookingDetailsModel.value.status == "started"
+                                        ? Container(
+                                            height: 44,
+                                            padding: const EdgeInsets.symmetric(horizontal: 35),
+                                            child: CustomButtonWidget(
+                                              padding: EdgeInsets.zero,
+                                              style: CustomButtonStyle.style2,
+                                              onPressed: () async {
+                                                var result = await controller.endBooking(contextCtr.bookingDetailsModel.value.bookingId.toString());
+                                                if (result.isNotEmpty && result[0] == true) {
+                                                  otp = "";
+                                                  otpDialogShow("end", contextCtr.bookingDetailsModel.value.bookingId.toString());
+                                                  successToast(result[1].toString());
+                                                } else {
+                                                  errorToast(result.isNotEmpty ? result[1] : "Something went wrong");
+                                                }
+                                              },
+                                              text: 'Booking End',
+                                            ),
+                                          )
+                                        : Align(
+                                            alignment: Alignment.center,
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
+                                              decoration: BoxDecoration(color: doneCl, borderRadius: BorderRadius.circular(4), border: Border.all(color: doneBorderCl, width: 0.5)),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Image.asset(ggCheck, height: 20.h, width: 20.w),
+                                                  SizedBox(width: 15.w),
+                                                  Text(
+                                                    contextCtr.bookingDetailsModel.value.status.toString().capitalizeFirst!,
+                                                    style: TextStyle(
+                                                      color: doneBorderCl,
+                                                      fontStyle: FontStyle.normal,
+                                                      fontSize: 18.sp,
+                                                      fontFamily: semiBold,
+                                                      fontWeight: FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                         SizedBox(height: 20.h),
                       ],
                     );
@@ -747,7 +829,7 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
         });
   }
 
-  void otpDialogShow() {
+  void otpDialogShow(String type, String booKingId) {
     showDialog(
       context: context,
       builder: (_) {
@@ -785,7 +867,7 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                         padding: const EdgeInsets.only(right: 20.0),
                         child: RichText(
                           text: TextSpan(
-                              text: "Please enter the verification code sent to your mobile number ",
+                              text: "Please enter the verification code sent to customer booking details ",
                               style: TextStyle(
                                 color: greyColorTxt,
                                 fontStyle: FontStyle.normal,
@@ -793,8 +875,8 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                                 fontFamily: regular,
                                 fontWeight: FontWeight.w400,
                               ),
-                              children: [
-                                TextSpan(
+                              children: const [
+                                /*TextSpan(
                                   text: "+91 8974784141",
                                   style: TextStyle(
                                     color: blackCl,
@@ -803,7 +885,7 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                                     fontFamily: semiBold,
                                     fontWeight: FontWeight.w600,
                                   ),
-                                )
+                                )*/
                               ]),
                         )),
                     SizedBox(height: 46.h),
@@ -847,8 +929,7 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                         appContext: context,
                         length: 4,
                         onChanged: (String value) {
-                          /*  controller.otpV = value;
-                        Log.console(value);*/
+                          otp = value;
                         },
                       ),
                     ),
@@ -858,8 +939,29 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                       child: CustomButtonWidget(
                         padding: EdgeInsets.zero,
                         style: CustomButtonStyle.style2,
-                        onPressed: () {
-                          Get.back();
+                        onPressed: () async {
+                          if (type == "start") {
+                            var result= await controller.startBookingOtp(booKingId, otp);
+                            if (result.isNotEmpty && result[0] == true) {
+                              otp = "";
+                               Get.back();
+                              successToast(result[1].toString());
+                            } else {
+                              Get.back();
+                              errorToast(result.isNotEmpty ? result[1] : "Something went wrong");
+                            }
+
+                          } else {
+                            var result= await controller.endBookingOtp(booKingId, otp);
+                            if (result.isNotEmpty && result[0] == true) {
+                              otp = "";
+                              Get.back();
+                              successToast(result[1].toString());
+                            } else {
+                              Get.back();
+                              errorToast(result.isNotEmpty ? result[1] : "Something went wrong");
+                            }
+                          }
                         },
                         text: 'Submit',
                       ),

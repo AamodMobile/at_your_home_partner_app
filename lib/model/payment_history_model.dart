@@ -1,4 +1,37 @@
-class BookingDetailsModel {
+
+class PaymentModel {
+  bool? status;
+  dynamic dayIncome;
+  String? weekIncome;
+  String? monthIncome;
+  List<PaymentHistoryModel>? data;
+
+  PaymentModel({
+    this.status,
+    this.dayIncome,
+    this.weekIncome,
+    this.monthIncome,
+    this.data,
+  });
+
+  factory PaymentModel.fromJson(Map<String, dynamic> json) => PaymentModel(
+    status: json["status"],
+    dayIncome: json["day_income"],
+    weekIncome: json["week_income"],
+    monthIncome: json["month_income"],
+    data: json["data"] == null ? [] : List<PaymentHistoryModel>.from(json["data"]!.map((x) => PaymentHistoryModel.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "day_income": dayIncome,
+    "week_income": weekIncome,
+    "month_income": monthIncome,
+    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
+}
+
+class PaymentHistoryModel {
   int? id;
   String? userId;
   String? patientId;
@@ -44,18 +77,12 @@ class BookingDetailsModel {
   dynamic serviceTime;
   dynamic extraTime;
   dynamic extraAmount;
-  dynamic staffDetails;
-  int? charge1;
-  int? charge2;
-  int? discount;
-  int? addonService;
-  int? itemTotal;
-  List<dynamic>? bookingDetails;
-  UserDetails? userDetails;
-  AddressDetails? addressDetails;
   PatientDetails? patientDetails;
+  ServiceDetails? serviceDetails;
+  Category? category;
+  Category? subcategory;
 
-  BookingDetailsModel({
+PaymentHistoryModel({
     this.id,
     this.userId,
     this.patientId,
@@ -101,19 +128,13 @@ class BookingDetailsModel {
     this.serviceTime,
     this.extraTime,
     this.extraAmount,
-    this.staffDetails,
-    this.charge1,
-    this.charge2,
-    this.discount,
-    this.addonService,
-    this.itemTotal,
-    this.bookingDetails,
-    this.userDetails,
-    this.addressDetails,
     this.patientDetails,
+    this.serviceDetails,
+    this.category,
+    this.subcategory,
   });
 
-  factory BookingDetailsModel.fromJson(Map<String, dynamic> json) => BookingDetailsModel(
+  factory PaymentHistoryModel.fromJson(Map<String, dynamic> json) => PaymentHistoryModel(
     id: json["id"],
     userId: json["user_id"],
     patientId: json["patient_id"],
@@ -135,7 +156,7 @@ class BookingDetailsModel {
     isBookingStarted: json["is_booking_started"],
     cancelledId: json["cancelled_id"],
     cancelledDate: json["cancelled_date"],
-    paymentId: json["payment_id"],
+    paymentId: json["payment_id"]??"",
     paymentType: json["payment_type"],
     isProduct: json["is_product"],
     totalPaybleAmt: json["total_payble_amt"],
@@ -159,16 +180,10 @@ class BookingDetailsModel {
     serviceTime: json["service_time"],
     extraTime: json["extra_time"],
     extraAmount: json["extra_amount"],
-    staffDetails: json["staff_details"],
-    charge1: json["charge_1"],
-    charge2: json["charge_2"],
-    discount: json["discount"],
-    addonService: json["addon_service"],
-    itemTotal: json["item_total"],
-    bookingDetails: json["booking_details"] == null ? [] : List<dynamic>.from(json["booking_details"]!.map((x) => x)),
-    userDetails: json["user_details"] == null ? null : UserDetails.fromJson(json["user_details"]),
-    addressDetails: json["address_details"] == null ? null : AddressDetails.fromJson(json["address_details"]),
     patientDetails: json["patient_details"] == null ? null : PatientDetails.fromJson(json["patient_details"]),
+    serviceDetails: json["service_details"] == null ? null : ServiceDetails.fromJson(json["service_details"]),
+    category: json["category"] == null ? null : Category.fromJson(json["category"]),
+    subcategory: json["subcategory"] == null ? null : Category.fromJson(json["subcategory"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -217,64 +232,98 @@ class BookingDetailsModel {
     "service_time": serviceTime,
     "extra_time": extraTime,
     "extra_amount": extraAmount,
-    "staff_details": staffDetails,
-    "charge_1": charge1,
-    "charge_2": charge2,
-    "discount": discount,
-    "addon_service": addonService,
-    "item_total": itemTotal,
-    "booking_details": bookingDetails == null ? [] : List<dynamic>.from(bookingDetails!.map((x) => x)),
-    "user_details": userDetails?.toJson(),
-    "address_details": addressDetails?.toJson(),
     "patient_details": patientDetails?.toJson(),
+    "service_details": serviceDetails?.toJson(),
+    "category": category?.toJson(),
+    "subcategory": subcategory?.toJson(),
   };
 }
 
-class AddressDetails {
+class Category {
   int? id;
-  String? houseNo;
-  String? apartment;
-  String? addressLine1;
-  dynamic addressLine2;
-  String? city;
-  String? addressType;
-  dynamic latitude;
-  dynamic longitude;
+  String? languageId;
+  String? title;
+  String? image;
+  String? bannerImage;
+  String? note;
+  String? status;
+  dynamic icon;
+  dynamic link;
+  String? sortOrder;
+  dynamic description;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  dynamic metaTitle;
+  dynamic metaTag;
+  dynamic metaDescription;
+  String? slug;
+  String? categoryId;
+  String? categoryName;
 
-  AddressDetails({
+  Category({
     this.id,
-    this.houseNo,
-    this.apartment,
-    this.addressLine1,
-    this.addressLine2,
-    this.city,
-    this.addressType,
-    this.latitude,
-    this.longitude,
+    this.languageId,
+    this.title,
+    this.image,
+    this.bannerImage,
+    this.note,
+    this.status,
+    this.icon,
+    this.link,
+    this.sortOrder,
+    this.description,
+    this.createdAt,
+    this.updatedAt,
+    this.metaTitle,
+    this.metaTag,
+    this.metaDescription,
+    this.slug,
+    this.categoryId,
+    this.categoryName,
   });
 
-  factory AddressDetails.fromJson(Map<String, dynamic> json) => AddressDetails(
+  factory Category.fromJson(Map<String, dynamic> json) => Category(
     id: json["id"],
-    houseNo: json["house_no"],
-    apartment: json["apartment"],
-    addressLine1: json["address_line_1"],
-    addressLine2: json["address_line_2"],
-    city: json["city"],
-    addressType: json["address_type"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
+    languageId: json["language_id"],
+    title: json["title"],
+    image: json["image"],
+    bannerImage: json["banner_image"],
+    note: json["note"],
+    status: json["status"],
+    icon: json["icon"],
+    link: json["link"],
+    sortOrder: json["sort_order"],
+    description: json["description"],
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    metaTitle: json["meta_title"],
+    metaTag: json["meta_tag"],
+    metaDescription: json["meta_description"],
+    slug: json["slug"],
+    categoryId: json["category_id"],
+    categoryName: json["category_name"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "house_no": houseNo,
-    "apartment": apartment,
-    "address_line_1": addressLine1,
-    "address_line_2": addressLine2,
-    "city": city,
-    "address_type": addressType,
-    "latitude": latitude,
-    "longitude": longitude,
+    "language_id": languageId,
+    "title": title,
+    "image": image,
+    "banner_image": bannerImage,
+    "note": note,
+    "status": status,
+    "icon": icon,
+    "link": link,
+    "sort_order": sortOrder,
+    "description": description,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+    "meta_title": metaTitle,
+    "meta_tag": metaTag,
+    "meta_description": metaDescription,
+    "slug": slug,
+    "category_id": categoryId,
+    "category_name": categoryName,
   };
 }
 
@@ -286,7 +335,7 @@ class PatientDetails {
   String? gender;
   DateTime? createdAt;
   DateTime? updatedAt;
-  List<PrescriptionImage>? prescriptionImage;
+  List<dynamic>? prescriptionImage;
 
   PatientDetails({
     this.id,
@@ -307,7 +356,7 @@ class PatientDetails {
     gender: json["gender"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-    prescriptionImage: json["prescription_image"] == null ? [] : List<PrescriptionImage>.from(json["prescription_image"]!.map((x) => x)),
+    prescriptionImage: json["prescription_image"] == null ? [] : List<dynamic>.from(json["prescription_image"]!.map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -322,53 +371,102 @@ class PatientDetails {
   };
 }
 
-class UserDetails {
+class ServiceDetails {
   int? id;
-  String? name;
-  String? mobile;
-  String? profilePic;
-  String? profileImage;
-
-  UserDetails({
-    this.id,
-    this.name,
-    this.mobile,
-    this.profilePic,
-    this.profileImage,
-  });
-
-  factory UserDetails.fromJson(Map<String, dynamic> json) => UserDetails(
-    id: json["id"],
-    name: json["name"],
-    mobile: json["mobile"],
-    profilePic: json["profile_pic"],
-    profileImage: json["profile_image"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "mobile": mobile,
-    "profile_pic": profilePic,
-    "profile_image": profileImage,
-  };
-}
-class PrescriptionImage {
-  int? id;
+  String? languageId;
+  dynamic vendorId;
+  String? categoryId;
+  String? categoryName;
+  String? subcategoryId;
+  String? subcategoryName;
+  String? bannerImage;
+  String? title;
+  String? slug;
+  dynamic link;
   String? image;
+  String? status;
+  String? subDescription;
+  String? description;
+  dynamic benefit;
+  String? price;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  dynamic metaTitle;
+  dynamic metaTag;
+  dynamic metaDescription;
 
-  PrescriptionImage({
+  ServiceDetails({
     this.id,
+    this.languageId,
+    this.vendorId,
+    this.categoryId,
+    this.categoryName,
+    this.subcategoryId,
+    this.subcategoryName,
+    this.bannerImage,
+    this.title,
+    this.slug,
+    this.link,
     this.image,
+    this.status,
+    this.subDescription,
+    this.description,
+    this.benefit,
+    this.price,
+    this.createdAt,
+    this.updatedAt,
+    this.metaTitle,
+    this.metaTag,
+    this.metaDescription,
   });
 
-  factory PrescriptionImage.fromJson(Map<String, dynamic> json) => PrescriptionImage(
+  factory ServiceDetails.fromJson(Map<String, dynamic> json) => ServiceDetails(
     id: json["id"],
-    image: json["image"]??"",
+    languageId: json["language_id"],
+    vendorId: json["vendor_id"],
+    categoryId: json["category_id"],
+    categoryName: json["category_name"],
+    subcategoryId: json["subcategory_id"],
+    subcategoryName: json["subcategory_name"],
+    bannerImage: json["banner_image"],
+    title: json["title"],
+    slug: json["slug"],
+    link: json["link"],
+    image: json["image"],
+    status: json["status"],
+    subDescription: json["sub_description"],
+    description: json["description"],
+    benefit: json["benefit"],
+    price: json["price"],
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    metaTitle: json["meta_title"],
+    metaTag: json["meta_tag"],
+    metaDescription: json["meta_description"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "language_id": languageId,
+    "vendor_id": vendorId,
+    "category_id": categoryId,
+    "category_name": categoryName,
+    "subcategory_id": subcategoryId,
+    "subcategory_name": subcategoryName,
+    "banner_image": bannerImage,
+    "title": title,
+    "slug": slug,
+    "link": link,
     "image": image,
+    "status": status,
+    "sub_description": subDescription,
+    "description": description,
+    "benefit": benefit,
+    "price": price,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+    "meta_title": metaTitle,
+    "meta_tag": metaTag,
+    "meta_description": metaDescription,
   };
 }
