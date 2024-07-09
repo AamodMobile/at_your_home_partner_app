@@ -64,7 +64,7 @@ class _SuccessfullyScreenState extends State<SuccessfullyScreen> {
                   padding: EdgeInsets.zero,
                   style: CustomButtonStyle.style2,
                   onPressed: () {
-                    Get.to(()=>const HomeScreen());
+                    Get.offAll(()=>const HomeScreen());
                   },
                   text: 'Ok',
                 ),

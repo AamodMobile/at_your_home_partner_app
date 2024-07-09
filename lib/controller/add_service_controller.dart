@@ -5,25 +5,26 @@ import 'package:at_your_home_partner/model/all_category_list_model.dart';
 import 'package:at_your_home_partner/model/service_list_model.dart';
 import 'package:at_your_home_partner/model/sub_category_list_model.dart';
 import 'package:at_your_home_partner/model/time_slot_model.dart';
+import 'package:at_your_home_partner/screens/home_screen.dart';
 import 'package:at_your_home_partner/service/api_logs.dart';
 import 'package:at_your_home_partner/service/api_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
-class AddServiceController extends GetxController implements GetxService {
-  bool isLoading = false;
-  var allCategoryList = <AllCategoryListModel>[];
+class AddServiceController extends GetxController {
+  var isLoading = false.obs;
+  var allCategoryList = <AllCategoryListModel>[].obs;
   var allCategoryListModel;
-  var subCategoryList = <SubCategoryListModel>[];
+  var subCategoryList = <SubCategoryListModel>[].obs;
   var subCategoryListModel;
-  var serviceList = List<ServiceListModel>.empty(growable: true);
+  var serviceList = <ServiceListModel>[].obs;
   var serviceListModel;
   var patientImages = [].obs;
   var selectedDateValue = "0".obs;
-  var selectedTimeSlot = [];
-  List<String> selectedService = List<String>.empty(growable: true);
-  List<ServiceListModel> selectedServiceList = List<ServiceListModel>.empty(growable: true);
-  var timeSlotList = <TimeSlotData>[];
+  var selectedTimeSlot = <String>[].obs;
+  var selectedService = <String>[].obs;
+  var selectedServiceList = <ServiceListModel>[].obs;
+  var timeSlotList = <TimeSlotData>[].obs;
   var timeSlotListModel;
 
   void reset() {
@@ -37,9 +38,8 @@ class AddServiceController extends GetxController implements GetxService {
     selectedServiceList.clear();
   }
 
-  void dateChange(var value) {
+  void dateChange(DateTime value) {
     selectedDateValue.value = DateFormat('yyyy-MM-dd').format(value);
-    //getTimeSlot(selectedDateValue.value);
     update();
   }
 
@@ -62,49 +62,45 @@ class AddServiceController extends GetxController implements GetxService {
   }
 
   Future<void> allCategoryListGet() async {
-    isLoading = true;
+    isLoading.value = true;
     try {
       allCategoryListModel = null;
       allCategoryList.clear();
       var result = await ApiService.allCategoryList();
       var json = jsonDecode(result.body);
       if (json["status"] == true) {
-        allCategoryList = List<AllCategoryListModel>.from(json['data'].map((i) => AllCategoryListModel.fromJson(i))).toList(growable: true);
+        allCategoryList.assignAll(List<AllCategoryListModel>.from(json['data'].map((i) => AllCategoryListModel.fromJson(i))));
       } else {
         errorToast("Category List not found");
       }
-
-      isLoading = false;
+      isLoading.value = false;
     } catch (e) {
-      isLoading = false;
+      isLoading.value = false;
       Log.console(e.toString());
     }
-    update();
   }
 
   Future<void> subCategoryListGet(String categoryId) async {
-    isLoading = true;
+    isLoading.value = true;
     try {
       subCategoryListModel = null;
       subCategoryList.clear();
       var result = await ApiService.subCategoryList(categoryId);
       var json = jsonDecode(result.body);
       if (json["status"] == true) {
-        subCategoryList = List<SubCategoryListModel>.from(json['data'].map((i) => SubCategoryListModel.fromJson(i))).toList(growable: true);
+        subCategoryList.assignAll(List<SubCategoryListModel>.from(json['data'].map((i) => SubCategoryListModel.fromJson(i))));
       } else {
         errorToast("SubCategory List not found");
       }
-
-      isLoading = false;
+      isLoading.value = false;
     } catch (e) {
-      isLoading = false;
+      isLoading.value = false;
       Log.console(e.toString());
     }
-    update();
   }
 
   Future<void> serviceListGet(String categoryId, String subcategoryId) async {
-    isLoading = true;
+    isLoading.value = true;
     try {
       serviceListModel = null;
       serviceList.clear();
@@ -113,18 +109,16 @@ class AddServiceController extends GetxController implements GetxService {
       var result = await ApiService.serviceList(categoryId, subcategoryId);
       var json = jsonDecode(result.body);
       if (json["status"] == true) {
-        var serviceLists = List<ServiceListModel>.from(json['data'].map((i) => ServiceListModel.fromJson(i))).toList(growable: true);
-        serviceList.addAll(serviceLists);
+        var serviceLists = List<ServiceListModel>.from(json['data'].map((i) => ServiceListModel.fromJson(i)));
+        serviceList.assignAll(serviceLists);
       } else {
         errorToast("Service List not found");
       }
-
-      isLoading = false;
+      isLoading.value = false;
     } catch (e) {
-      isLoading = false;
+      isLoading.value = false;
       Log.console(e.toString());
     }
-    update();
   }
 
   Future<List<dynamic>> createService(String categoryId, String subcategoryId) async {
@@ -149,24 +143,22 @@ class AddServiceController extends GetxController implements GetxService {
   }
 
   Future<void> timeSlotsListGet() async {
-    isLoading = true;
+    isLoading.value = true;
     try {
       timeSlotList.clear();
       timeSlotListModel = null;
       var result = await ApiService.timeSlotsList();
       var json = jsonDecode(result.body);
       if (json["status"] == true) {
-        timeSlotList = List<TimeSlotData>.from(json['data'].map((i) => TimeSlotData.fromJson(i))).toList(growable: true);
+        timeSlotList.assignAll(List<TimeSlotData>.from(json['data'].map((i) => TimeSlotData.fromJson(i))));
       } else {
         errorToast("Category List not found");
       }
-
-      isLoading = false;
+      isLoading.value = false;
     } catch (e) {
-      isLoading = false;
+      isLoading.value = false;
       Log.console(e.toString());
     }
-    update();
   }
 
   Future<void> createTimeslots(String day, String timeSlot) async {
@@ -176,7 +168,7 @@ class AddServiceController extends GetxController implements GetxService {
       var json = jsonDecode(result.body);
       if (json["status"] == true) {
         closeProgress();
-        Get.back();
+        Get.off(() => const HomeScreen());
         successToast(json["message"].toString());
       } else {
         closeProgress();
@@ -186,6 +178,5 @@ class AddServiceController extends GetxController implements GetxService {
       closeProgress();
       Log.console(e.toString());
     }
-    update();
   }
 }

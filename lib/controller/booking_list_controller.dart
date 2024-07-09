@@ -74,7 +74,7 @@ class BookingListController extends GetxController implements GetxService {
   }
 
   Future<void> bookingDetails(String bookingId) async {
-    try {
+  //  try {
       isLoading = true;
       var result = await ApiService.bookingDetails(bookingId);
       var json = jsonDecode(result.body);
@@ -86,10 +86,10 @@ class BookingListController extends GetxController implements GetxService {
         isLoading = false;
         errorToast(json["message"].toString());
       }
-    } catch (e) {
-      isLoading = true;
-      Log.console(e.toString());
-    }
+    //} catch (e) {
+     // isLoading = false;
+   //   Log.console(e.toString());
+   // }
     update();
   }
 

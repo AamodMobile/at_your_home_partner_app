@@ -3,6 +3,7 @@ import 'package:at_your_home_partner/controller/booking_list_controller.dart';
 import 'package:at_your_home_partner/core/common_widgets/custom_buttons.dart';
 import 'package:at_your_home_partner/core/expandable_text_widget.dart';
 import 'package:at_your_home_partner/screens/prescription_screen.dart';
+import 'package:at_your_home_partner/screens/successfully_completed_screen.dart';
 import 'package:at_your_home_partner/service/api_url.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,325 +26,591 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-        init: Get.find<BookingListController>(),
-        initState: (state) {
-          Get.find<BookingListController>().bookingDetails(widget.bookingId);
-        },
-        builder: (contextCtr) {
-          return SafeArea(
-            child: Scaffold(
-              backgroundColor: whiteCl,
-              appBar: AppBar(
-                backgroundColor: appBar,
-                automaticallyImplyLeading: false,
-                leadingWidth: MediaQuery.of(context).size.width,
-                leading: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: Image.asset(
-                          arrowBackIc,
-                          height: 26.h,
-                          width: 26.w,
+      init: Get.find<BookingListController>(),
+      initState: (state) {
+        Get.find<BookingListController>().bookingDetails(widget.bookingId);
+      },
+      builder: (contextCtr) {
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: whiteCl,
+            appBar: AppBar(
+              backgroundColor: appBar,
+              automaticallyImplyLeading: false,
+              leadingWidth: MediaQuery.of(context).size.width,
+              leading: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Image.asset(
+                        arrowBackIc,
+                        height: 26.h,
+                        width: 26.w,
+                      ),
+                    ),
+                    SizedBox(width: 13.w),
+                    Text(
+                      "Details",
+                      style: TextStyle(
+                        color: whiteCl,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 18.sp,
+                        fontFamily: semiBold,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () async {
+                        var url = "tel:91${contextCtr.bookingDetailsModel.value.userDetails!.mobile}";
+                        if (await launchUrl(Uri.parse(url))) {
+                          await launchUrl(Uri.parse(url));
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      },
+                      child: Image.asset(
+                        callIc,
+                        height: 26.h,
+                        width: 26.w,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            body: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.w),
+              child: SingleChildScrollView(
+                child: Builder(builder: (context) {
+                  if (contextCtr.isLoading) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height - 200,
+                      width: MediaQuery.of(context).size.width,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: mainColor,
                         ),
                       ),
-                      SizedBox(width: 13.w),
+                    );
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 14.h, width: MediaQuery.of(context).size.width),
+                      Container(
+                        decoration: BoxDecoration(color: const Color(0xFFF3F3F3), borderRadius: BorderRadius.circular(10), border: Border.all(color: const Color(0xFFE4E4E4))),
+                        padding: EdgeInsets.symmetric(horizontal: 9.w, vertical: 8.h),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 30.h,
+                              width: 30.w,
+                              padding: EdgeInsets.all(7.w),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFE5F9E9),
+                                border: Border.all(color: mainColor.withOpacity(0.23), width: 0.5),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Image.asset(
+                                timeNewIc,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(width: 10.w),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Booking Date & Time",
+                                  style: TextStyle(
+                                    color: const Color(0xFF002C07),
+                                    fontStyle: FontStyle.normal,
+                                    fontSize: 12.sp,
+                                    fontFamily: semiBold,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: 2.h),
+                                Row(
+                                  children: [
+                                    Text(
+                                      contextCtr.bookingDetailsModel.value.deliveryDate.toString(),
+                                      style: TextStyle(
+                                        color: const Color(0xFF454545),
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: 12.sp,
+                                        fontFamily: regular,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      ", ${contextCtr.bookingDetailsModel.value.deliveryTime}",
+                                      style: TextStyle(
+                                        color: const Color(0xFF454545),
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: 12.sp,
+                                        fontFamily: regular,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
                       Text(
-                        "Details",
+                        "Patient Details",
                         style: TextStyle(
-                          color: whiteCl,
+                          color: blackCl,
                           fontStyle: FontStyle.normal,
-                          fontSize: 18.sp,
+                          fontSize: 14.sp,
                           fontFamily: semiBold,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () async {
-                          var url = "tel:91${contextCtr.bookingDetailsModel.value.userDetails!.mobile}";
-                          if (await launchUrl(Uri.parse(url))) {
-                            await launchUrl(Uri.parse(url));
-                          } else {
-                            throw 'Could not launch $url';
-                          }
-                        },
-                        child: Image.asset(
-                          callIc,
-                          height: 26.h,
-                          width: 26.w,
-                        ),
+                      SizedBox(height: 12.h),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 30.h,
+                            width: 30.w,
+                            padding: EdgeInsets.all(7.w),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE5F9E9),
+                              border: Border.all(color: mainColor.withOpacity(0.23), width: 0.5),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Image.asset(
+                              userNewIc,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(width: 10.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Patient Name",
+                                style: TextStyle(
+                                  color: const Color(0xFF002C07),
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 12.sp,
+                                  fontFamily: semiBold,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 2.h),
+                              Text(
+                                "${contextCtr.bookingDetailsModel.value.patientDetails?.name}",
+                                style: TextStyle(
+                                  color: const Color(0xFF454545),
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 12.sp,
+                                  fontFamily: regular,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              body: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                child: SingleChildScrollView(
-                  child: Builder(builder: (context) {
-                    if (contextCtr.isLoading) {
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height - 200,
-                        width: MediaQuery.of(context).size.width,
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            color: mainColor,
+                      SizedBox(height: 12.h),
+                      Divider(
+                        color: borderColorCont,
+                        height: 1.h,
+                      ),
+                      SizedBox(height: 12.h),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 30.h,
+                            width: 30.w,
+                            padding: EdgeInsets.all(7.w),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE5F9E9),
+                              border: Border.all(color: mainColor.withOpacity(0.23), width: 0.5),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Image.asset(
+                              genderNewIc,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 14.h, width: MediaQuery.of(context).size.width),
-                        Text(
-                          "Patient Details",
-                          style: TextStyle(
-                            color: blackCl,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 14.sp,
-                            fontFamily: semiBold,
-                            fontWeight: FontWeight.w600,
+                          SizedBox(width: 10.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Age & Gander",
+                                style: TextStyle(
+                                  color: const Color(0xFF002C07),
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 12.sp,
+                                  fontFamily: semiBold,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 2.h),
+                              Text(
+                                "${contextCtr.bookingDetailsModel.value.patientDetails?.age}, ${contextCtr.bookingDetailsModel.value.patientDetails?.gender} ",
+                                style: TextStyle(
+                                  color: const Color(0xFF454545),
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 12.sp,
+                                  fontFamily: regular,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        SizedBox(height: 10.h),
-                        contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage!.isEmpty
-                            ? const SizedBox()
-                            : SizedBox(
-                                height: 111,
-                                width: MediaQuery.of(context).size.width,
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: ListView.builder(
-                                    clipBehavior: Clip.none,
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    itemCount: contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage?.length,
-                                    reverse: true,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Get.to(() => PrescriptionScreen(imageUrl: ApiUrl.imageUrl + contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage![index].image.toString()));
-                                        },
-                                        child: Container(
-                                          margin: const EdgeInsets.only(right: 9),
-                                          height: 111,
-                                          width: 111,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: mainColor, width: 1),
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
-                                            child: contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage![index].image != ""
-                                                ? CachedNetworkImage(
-                                                    errorWidget: (context, url, error) => Image.asset(
-                                                      clientDemo,
-                                                      fit: BoxFit.fill,
-                                                      height: 90.h,
-                                                      width: 70.w,
-                                                    ),
+                        ],
+                      ),
+                      SizedBox(height: 12.h),
+                      Divider(
+                        color: borderColorCont,
+                        height: 1.h,
+                      ),
+                      SizedBox(height: 12.h),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 30.h,
+                            width: 30.w,
+                            padding: EdgeInsets.all(7.w),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE5F9E9),
+                              border: Border.all(color: mainColor.withOpacity(0.23), width: 0.5),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Image.asset(
+                              locationNewIc,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(width: 10.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Address",
+                                style: TextStyle(
+                                  color: const Color(0xFF002C07),
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 12.sp,
+                                  fontFamily: semiBold,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 2.h),
+                              Text(
+                                "${contextCtr.bookingDetailsModel.value.addressDetails?.addressLine1} ",
+                                style: TextStyle(
+                                  color: const Color(0xFF454545),
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 12.sp,
+                                  fontFamily: regular,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 12.h),
+                      Row(
+                        children: [
+                          const Spacer(),
+                          contextCtr.bookingDetailsModel.value.status == "pending"
+                              ? Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                                  decoration: BoxDecoration(
+                                    color: blueLightCl,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(color: blueLightCl, width: 0.5),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Image.asset(outlineDirectionsIc, height: 16.h, width: 16.w),
+                                      SizedBox(width: 6.w),
+                                      Text(
+                                        "Get directions",
+                                        style: TextStyle(
+                                          color: whiteCl,
+                                          fontStyle: FontStyle.normal,
+                                          fontSize: 10.sp,
+                                          fontFamily: regular,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 5.h),
+                                  decoration: BoxDecoration(
+                                      color: contextCtr.bookingDetailsModel.value.status == "requested"
+                                          ? pendingCl
+                                          : contextCtr.bookingDetailsModel.value.status == "cancelled"
+                                              ? cancelCl
+                                              : doneCl,
+                                      borderRadius: BorderRadius.circular(14),
+                                      border: Border.all(
+                                          color: contextCtr.bookingDetailsModel.value.status == "requested"
+                                              ? pendingBorderCl
+                                              : contextCtr.bookingDetailsModel.value.status == "cancelled"
+                                                  ? cancelBorderCl
+                                                  : doneBorderCl,
+                                          width: 0.5)),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                          contextCtr.bookingDetailsModel.value.status == "requested"
+                                              ? clockTime
+                                              : contextCtr.bookingDetailsModel.value.status == "cancelled"
+                                                  ? outlineCancel
+                                                  : ggCheck,
+                                          height: 12.h,
+                                          width: 12.w),
+                                      SizedBox(width: 3.w),
+                                      Text(
+                                        contextCtr.bookingDetailsModel.value.status.toString().capitalizeFirst!,
+                                        style: TextStyle(
+                                          color: contextCtr.bookingDetailsModel.value.status == "requested"
+                                              ? pendingBorderCl
+                                              : contextCtr.bookingDetailsModel.value.status == "cancelled"
+                                                  ? cancelBorderCl
+                                                  : doneBorderCl,
+                                          fontStyle: FontStyle.normal,
+                                          fontSize: 10.sp,
+                                          fontFamily: regular,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                          SizedBox(width: 30.w),
+                        ],
+                      ),
+                      SizedBox(height: 12.h),
+                      Divider(
+                        color: borderColorCont,
+                        height: 1.h,
+                      ),
+                      SizedBox(height: 16.h),
+                      contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage!.isEmpty
+                          ? const SizedBox()
+                          : SizedBox(
+                              height: 111,
+                              width: MediaQuery.of(context).size.width,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: ListView.builder(
+                                  clipBehavior: Clip.none,
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage?.length,
+                                  reverse: true,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => PrescriptionScreen(imageUrl: ApiUrl.imageUrl + contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage![index].image.toString()));
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.only(right: 9),
+                                        height: 111,
+                                        width: 111,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: mainColor, width: 1),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(10),
+                                          child: contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage![index].image != ""
+                                              ? CachedNetworkImage(
+                                                  errorWidget: (context, url, error) => Image.asset(
+                                                    clientDemo,
                                                     fit: BoxFit.fill,
                                                     height: 90.h,
                                                     width: 70.w,
-                                                    imageUrl: ApiUrl.imageUrl + contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage![index].image.toString(),
-                                                    placeholder: (a, b) => const Center(
-                                                      child: CircularProgressIndicator(),
-                                                    ),
-                                                  )
-                                                : Image.asset(slipImg, fit: BoxFit.cover),
-                                          ),
+                                                  ),
+                                                  fit: BoxFit.fill,
+                                                  height: 90.h,
+                                                  width: 70.w,
+                                                  imageUrl: ApiUrl.imageUrl + contextCtr.bookingDetailsModel.value.patientDetails!.prescriptionImage![index].image.toString(),
+                                                  placeholder: (a, b) => const Center(
+                                                    child: CircularProgressIndicator(),
+                                                  ),
+                                                )
+                                              : Image.asset(slipImg, fit: BoxFit.cover),
                                         ),
-                                      );
-                                    },
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                      SizedBox(height: 16.h),
+                      Text(
+                        "Service Details",
+                        style: TextStyle(
+                          color: blackCl,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 14.sp,
+                          fontFamily: semiBold,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 5),
+                        padding: EdgeInsets.all(6.h),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF6FFF8),
+                          borderRadius: BorderRadius.circular(8.dm),
+                          border: Border.all(color: const Color(0xFF30783F), width: 0.5),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 64.h,
+                                  width: 64.w,
+                                  padding: EdgeInsets.all(5.w),
+                                  decoration: BoxDecoration(color: const Color(0xFFE1FFE8), border: Border.all(color: mainColor.withOpacity(0.23), width: 0.5), borderRadius: BorderRadius.circular(5)),
+                                  child: contextCtr.bookingDetailsModel.value.serviceBannerImage != ""
+                                      ? CachedNetworkImage(
+                                          errorWidget: (context, url, error) => Image.asset(drDemoImg, fit: BoxFit.fill, height: 82.h, width: 82.w),
+                                          fit: BoxFit.fill,
+                                          height: 82.h,
+                                          width: 82.w,
+                                          imageUrl: ApiUrl.imageUrl + contextCtr.bookingDetailsModel.value.serviceBannerImage.toString(),
+                                          placeholder: (a, b) => const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        )
+                                      : Image.asset(injectionIc),
+                                ),
+                                SizedBox(width: 14.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        contextCtr.bookingDetailsModel.value.serviceName.toString(),
+                                        style: TextStyle(
+                                          color: blackCl,
+                                          fontStyle: FontStyle.normal,
+                                          fontSize: 16.sp,
+                                          fontFamily: semiBold,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(height: 15.h),
+                                      Text(
+                                        "₹ ${contextCtr.bookingDetailsModel.value.servicePrice}",
+                                        style: TextStyle(
+                                          color: blackCl,
+                                          fontStyle: FontStyle.normal,
+                                          fontSize: 16.sp,
+                                          fontFamily: semiBold,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                        SizedBox(height: 14.h),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(color: bgGryCl, border: Border.all(color: borderColorCont, width: 1), borderRadius: BorderRadius.circular(10.dm)),
-                          child: Column(
-                            children: [
-                              SizedBox(height: 8.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Image.asset(
-                                          userOutlineIc,
-                                          height: 16.h,
-                                          width: 16.w,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        SizedBox(width: 10.w),
-                                        Text(
-                                          "Patient Name",
-                                          style: TextStyle(
-                                            color: mainColor,
-                                            fontStyle: FontStyle.normal,
-                                            fontSize: 12.sp,
-                                            fontFamily: semiBold,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      contextCtr.bookingDetailsModel.value.patientDetails!.name.toString(),
-                                      style: TextStyle(
-                                        color: blackCl,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 14.sp,
-                                        fontFamily: semiBold,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 5.h),
-                              Divider(color: borderColorCont, height: 1.h),
-                              SizedBox(height: 5.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Image.asset(
-                                          dateRangeIc,
-                                          height: 16.h,
-                                          width: 16.w,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        SizedBox(width: 10.w),
-                                        Text(
-                                          "Age",
-                                          style: TextStyle(
-                                            color: mainColor,
-                                            fontStyle: FontStyle.normal,
-                                            fontSize: 12.sp,
-                                            fontFamily: semiBold,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      "${contextCtr.bookingDetailsModel.value.patientDetails!.age.toString()} Years",
-                                      style: TextStyle(
-                                        color: blackCl,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 14.sp,
-                                        fontFamily: semiBold,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 5.h),
-                              Divider(color: borderColorCont, height: 1.h),
-                              SizedBox(height: 5.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Image.asset(
-                                          maleIc,
-                                          height: 16.h,
-                                          width: 16.w,
-                                          color: mainColor,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        SizedBox(width: 10.w),
-                                        Text(
-                                          "Gender",
-                                          style: TextStyle(
-                                            color: mainColor,
-                                            fontStyle: FontStyle.normal,
-                                            fontSize: 12.sp,
-                                            fontFamily: semiBold,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      contextCtr.bookingDetailsModel.value.patientDetails!.gender != null
-                                          ? contextCtr.bookingDetailsModel.value.patientDetails!.gender!.capitalizeFirst.toString()
-                                          : "",
-                                      style: TextStyle(
-                                        color: blackCl,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 14.sp,
-                                        fontFamily: semiBold,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 8.h),
-                            ],
-                          ),
+                              ],
+                            ),
+                            SizedBox(height: 9.h),
+                            /* Html(
+                                data:contextCtr.bookingDetailsModel.value.serviceSubDescription.toString(),
+                                shrinkWrap: true,
+                                style: {
+                                  "body": Style(
+                                    fontSize: FontSize(10.0),
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: regular,
+                                    color: Colors.black,
+                                  ),
+                                },
+                              )*/
+                            ExpandableTextWidget(text: contextCtr.bookingDetailsModel.value.serviceSubDescription.toString())
+                          ],
                         ),
-                        SizedBox(height: 15.h),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 11.h),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF4FEF3),
-                            border: Border.all(color: mainColor, width: 2),
-                            borderRadius: BorderRadius.circular(10.dm),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 40.h,
-                                width: 40.w,
-                                padding: EdgeInsets.all(4.w),
-                                decoration: BoxDecoration(color: mainColor, border: Border.all(color: mainColor.withOpacity(0.23), width: 0.5), borderRadius: BorderRadius.circular(5)),
-                                child: Image.asset(
-                                  dateTimeIc,
-                                  color: whiteCl,
-                                ),
+                      ),
+                      SizedBox(height: 16.h),
+                      Text(
+                        "Payment Details",
+                        style: TextStyle(
+                          color: blackCl,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 14.sp,
+                          fontFamily: semiBold,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      Container(
+                        padding: EdgeInsets.all(6.h),
+                        decoration: BoxDecoration(
+                          color: whiteCl,
+                          borderRadius: BorderRadius.circular(8.dm),
+                          border: Border.all(color: const Color(0xFFE4E4E4), width: 1),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 40.h,
+                              width: 40.w,
+                              padding: EdgeInsets.all(4.w),
+                              decoration: BoxDecoration(color: mainColor, border: Border.all(color: mainColor.withOpacity(0.23), width: 0.5), borderRadius: BorderRadius.circular(5)),
+                              child: Image.asset(
+                                money,
+                                color: whiteCl,
                               ),
-                              SizedBox(width: 9.w),
-                              Column(
+                            ),
+                            SizedBox(width: 9.w),
+                            Expanded(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Booking Date & Time",
+                                    contextCtr.bookingDetailsModel.value.paymentType.toString(),
                                     style: TextStyle(
-                                      color: blackCl,
+                                      color: Colors.grey,
                                       fontStyle: FontStyle.normal,
-                                      fontSize: 10.sp,
+                                      fontSize: 12.sp,
                                       fontFamily: semiBold,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                   SizedBox(height: 2.h),
                                   Text(
-                                    "${contextCtr.bookingDetailsModel.value.deliveryDate!.toString()}, ${contextCtr.bookingDetailsModel.value.deliveryTime!.toString()}",
+                                    "₹ ${contextCtr.bookingDetailsModel.value.totalAmount}",
                                     style: TextStyle(
                                       color: blackCl,
                                       fontStyle: FontStyle.normal,
@@ -354,479 +621,137 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 15.h),
-                        Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFE3DD),
-                              border: Border.all(color: const Color(0xFFCE9E94), width: 1),
-                              borderRadius: BorderRadius.circular(10.dm),
                             ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      locationIc,
-                                      height: 16.h,
-                                      width: 16.w,
-                                      color: const Color(0xFFA41C00),
-                                      fit: BoxFit.cover,
+                            SizedBox(width: 10.w),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                              decoration: BoxDecoration(color: doneCl, borderRadius: BorderRadius.circular(14), border: Border.all(color: doneBorderCl, width: 0.5)),
+                              child: Row(
+                                children: [
+                                  Image.asset(ggCheck, height: 16.h, width: 16.w),
+                                  SizedBox(width: 3.w),
+                                  Text(
+                                    "Received",
+                                    style: TextStyle(
+                                      color: doneBorderCl,
+                                      fontStyle: FontStyle.normal,
+                                      fontSize: 12.sp,
+                                      fontFamily: semiBold,
+                                      fontWeight: FontWeight.w400,
                                     ),
-                                    SizedBox(width: 10.w),
-                                    Text(
-                                      "Address",
-                                      style: TextStyle(
-                                        color: blackCl,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 14.sp,
-                                        fontFamily: semiBold,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 7.h),
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 10.h),
-                                  decoration: BoxDecoration(
-                                    color: whiteCl,
-                                    border: Border.all(color: const Color(0xFFDBA195), width: 1),
-                                    borderRadius: BorderRadius.circular(7.dm),
                                   ),
-                                  child: Row(
-                                    children: [
-                                      Image.asset(
-                                        homeWorkIc,
-                                        height: 18.h,
-                                        width: 18.w,
-                                        color: const Color(0xFFA41C00),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      SizedBox(width: 8.w),
-                                      Expanded(
-                                        child: Text(
-                                          contextCtr.bookingDetailsModel.value.addressDetails != null ? contextCtr.bookingDetailsModel.value.addressDetails!.addressLine1!.toString() : "",
-                                          style: TextStyle(
-                                            color: blackCl,
-                                            fontStyle: FontStyle.normal,
-                                            fontSize: 10.sp,
-                                            fontFamily: regular,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 15.w),
-                                      Container(
-                                        height: 15.h,
-                                        width: 15.w,
-                                        padding: const EdgeInsets.all(3),
-                                        decoration: BoxDecoration(
-                                          color: Colors.transparent,
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: mainColor,
-                                            width: 1,
-                                          ),
-                                        ),
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            color: mainColor,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 10.h),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {},
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                                        decoration: BoxDecoration(
-                                          color: blueLightCl,
-                                          borderRadius: BorderRadius.circular(20),
-                                          border: Border.all(color: blueLightCl, width: 0.5),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Image.asset(outlineDirectionsIc, height: 16.h, width: 16.w),
-                                            SizedBox(width: 6.w),
-                                            Text(
-                                              "Get directions",
-                                              style: TextStyle(
-                                                color: whiteCl,
-                                                fontStyle: FontStyle.normal,
-                                                fontSize: 12.sp,
-                                                fontFamily: semiBold,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            )),
-                        SizedBox(height: 10.h),
-                        Text(
-                          "Service Details",
-                          style: TextStyle(
-                            color: blackCl,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 14.sp,
-                            fontFamily: semiBold,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        MediaQuery.removePadding(
-                          context: context,
-                          removeTop: true,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: contextCtr.bookingDetailsModel.value.bookingDetails!.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                  margin: const EdgeInsets.symmetric(vertical: 5),
-                                  padding: EdgeInsets.all(6.h),
-                                  decoration: BoxDecoration(
-                                    color: whiteCl,
-                                    borderRadius: BorderRadius.circular(8.dm),
-                                    border: Border.all(color: const Color(0xFFE4E4E4), width: 1),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            height: 64.h,
-                                            width: 64.w,
-                                            padding: EdgeInsets.all(5.w),
-                                            decoration: BoxDecoration(
-                                                color: const Color(0xFFEEFFF2), border: Border.all(color: mainColor.withOpacity(0.23), width: 0.5), borderRadius: BorderRadius.circular(5)),
-                                            child: Image.asset(injectionIc),
-                                          ),
-                                          SizedBox(width: 14.w),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                RichText(
-                                                    text: TextSpan(
-                                                        text: contextCtr.bookingDetailsModel.value.bookingDetails![index].serviceName.toString(),
-                                                        style: TextStyle(
-                                                          color: blackCl,
-                                                          fontStyle: FontStyle.normal,
-                                                          fontSize: 20.sp,
-                                                          fontFamily: semiBold,
-                                                          fontWeight: FontWeight.w600,
-                                                        ),
-                                                        children: [
-                                                      TextSpan(
-                                                        text: " ",
-                                                        style: TextStyle(
-                                                          color: blackCl,
-                                                          fontStyle: FontStyle.normal,
-                                                          fontSize: 10.sp,
-                                                          fontFamily: semiBold,
-                                                          fontWeight: FontWeight.w400,
-                                                        ),
-                                                      )
-                                                    ])),
-                                                SizedBox(height: 15.h),
-                                                Text(
-                                                  "₹ ${contextCtr.bookingDetailsModel.value.bookingDetails![index].price.toString()}",
-                                                  style: TextStyle(
-                                                    color: blackCl,
-                                                    fontStyle: FontStyle.normal,
-                                                    fontSize: 16.sp,
-                                                    fontFamily: semiBold,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 9.h),
-                                      ExpandableTextWidget(text: contextCtr.bookingDetailsModel.value.bookingDetails![index].serviceName.toString())
-                                    ],
-                                  ),
-                                );
-                              }),
-                        ),
-                        SizedBox(height: 15.h),
-                        Text(
-                          "Payment Details",
-                          style: TextStyle(
-                            color: blackCl,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 14.sp,
-                            fontFamily: semiBold,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        Container(
-                          padding: EdgeInsets.all(6.h),
-                          decoration: BoxDecoration(
-                            color: whiteCl,
-                            borderRadius: BorderRadius.circular(8.dm),
-                            border: Border.all(color: const Color(0xFFE4E4E4), width: 1),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 40.h,
-                                width: 40.w,
-                                padding: EdgeInsets.all(4.w),
-                                decoration: BoxDecoration(color: mainColor, border: Border.all(color: mainColor.withOpacity(0.23), width: 0.5), borderRadius: BorderRadius.circular(5)),
-                                child: Image.asset(
-                                  money,
-                                  color: whiteCl,
-                                ),
+                                ],
                               ),
-                              SizedBox(width: 9.w),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      contextCtr.bookingDetailsModel.value.paymentType.toString(),
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 12.sp,
-                                        fontFamily: semiBold,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    SizedBox(height: 2.h),
-                                    Text(
-                                      "₹ ${contextCtr.bookingDetailsModel.value.totalAmount}",
-                                      style: TextStyle(
-                                        color: blackCl,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 14.sp,
-                                        fontFamily: semiBold,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(width: 10.w),
-                              contextCtr.bookingDetailsModel.value.paymentType == "Cash on Home"
-                                  ? Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                      decoration: BoxDecoration(color: blackCl, borderRadius: BorderRadius.circular(14)),
-                                      child: Text(
-                                        "Collect Cash",
-                                        style: TextStyle(
-                                          color: whiteCl,
-                                          fontStyle: FontStyle.normal,
-                                          fontSize: 12.sp,
-                                          fontFamily: semiBold,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    )
-                                  : Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                                      decoration: BoxDecoration(color: doneCl, borderRadius: BorderRadius.circular(14), border: Border.all(color: doneBorderCl, width: 0.5)),
-                                      child: Row(
-                                        children: [
-                                          Image.asset(ggCheck, height: 16.h, width: 16.w),
-                                          SizedBox(width: 3.w),
-                                          Text(
-                                            "Received",
-                                            style: TextStyle(
-                                              color: doneBorderCl,
-                                              fontStyle: FontStyle.normal,
-                                              fontSize: 12.sp,
-                                              fontFamily: semiBold,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 20.h),
+                      ),
+                      SizedBox(height: 80.h),
+                    ],
+                  );
+                }),
+              ),
+            ),
+            bottomSheet: contextCtr.isLoading
+                ? const SizedBox()
+                : Container(
+                    color: whiteCl,
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.symmetric(horizontal: contextCtr.bookingDetailsModel.value.status == "requested" ? 20.w : 60.w, vertical: 15.h),
+                    child: Wrap(
+                      children: [
                         contextCtr.bookingDetailsModel.value.status == "requested"
-                            ? Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          contextCtr.vendorCancelledBooking(contextCtr.bookingDetailsModel.value.bookingId.toString());
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 10.h),
-                                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10), border: Border.all(color: cancelBorderCl)),
-                                          child: Center(
-                                            child: Text(
-                                              "Reject",
-                                              style: TextStyle(
-                                                color: cancelBorderCl,
-                                                fontStyle: FontStyle.normal,
-                                                fontSize: 16.sp,
-                                                fontFamily: semiBold,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 8.w),
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          contextCtr.vendorBookingAccept(contextCtr.bookingDetailsModel.value.bookingId.toString(), "1");
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 10.h),
-                                          decoration: BoxDecoration(color: appBar, borderRadius: BorderRadius.circular(10), border: Border.all(color: appBar)),
-                                          child: Center(
-                                            child: Text(
-                                              "Accept",
-                                              style: TextStyle(
-                                                color: whiteCl,
-                                                fontStyle: FontStyle.normal,
-                                                fontSize: 16.sp,
-                                                fontFamily: semiBold,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : contextCtr.bookingDetailsModel.value.status == "cancelled"
-                                ? Align(
-                                    alignment: Alignment.center,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
-                                      decoration: BoxDecoration(color: cancelCl, borderRadius: BorderRadius.circular(4), border: Border.all(color: cancelBorderCl, width: 0.5)),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Image.asset(outlineCancel, height: 20.h, width: 20.w),
-                                          SizedBox(width: 15.w),
-                                          Text(
-                                            contextCtr.bookingDetailsModel.value.status.toString().capitalizeFirst!,
+                            ? Row(
+                                children: [
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        contextCtr.vendorCancelledBooking(contextCtr.bookingDetailsModel.value.bookingId.toString());
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10), border: Border.all(color: cancelBorderCl)),
+                                        child: Center(
+                                          child: Text(
+                                            "Reject",
                                             style: TextStyle(
                                               color: cancelBorderCl,
                                               fontStyle: FontStyle.normal,
-                                              fontSize: 18.sp,
+                                              fontSize: 16.sp,
                                               fontFamily: semiBold,
                                               fontWeight: FontWeight.w400,
                                             ),
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ),
-                                  )
-                                : contextCtr.bookingDetailsModel.value.status == "pending"
-                                    ? Container(
-                                        height: 44,
-                                        padding: const EdgeInsets.symmetric(horizontal: 35),
-                                        child: CustomButtonWidget(
-                                          padding: EdgeInsets.zero,
-                                          style: CustomButtonStyle.style2,
-                                          onPressed: () async {
-                                            var result = await controller.startBooking(contextCtr.bookingDetailsModel.value.bookingId.toString());
-                                            if (result.isNotEmpty && result[0] == true) {
-                                              otp = "";
-                                              otpDialogShow("start", contextCtr.bookingDetailsModel.value.bookingId.toString());
-                                              successToast(result[1].toString());
-                                            } else {
-                                              errorToast(result.isNotEmpty ? result[1] : "Something went wrong");
-                                            }
-                                          },
-                                          text: 'Booking Start',
-                                        ),
-                                      )
-                                    : contextCtr.bookingDetailsModel.value.status == "started"
-                                        ? Container(
-                                            height: 44,
-                                            padding: const EdgeInsets.symmetric(horizontal: 35),
-                                            child: CustomButtonWidget(
-                                              padding: EdgeInsets.zero,
-                                              style: CustomButtonStyle.style2,
-                                              onPressed: () async {
-                                                var result = await controller.endBooking(contextCtr.bookingDetailsModel.value.bookingId.toString());
-                                                if (result.isNotEmpty && result[0] == true) {
-                                                  otp = "";
-                                                  otpDialogShow("end", contextCtr.bookingDetailsModel.value.bookingId.toString());
-                                                  successToast(result[1].toString());
-                                                } else {
-                                                  errorToast(result.isNotEmpty ? result[1] : "Something went wrong");
-                                                }
-                                              },
-                                              text: 'Booking End',
-                                            ),
-                                          )
-                                        : Align(
-                                            alignment: Alignment.center,
-                                            child: Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
-                                              decoration: BoxDecoration(color: doneCl, borderRadius: BorderRadius.circular(4), border: Border.all(color: doneBorderCl, width: 0.5)),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Image.asset(ggCheck, height: 20.h, width: 20.w),
-                                                  SizedBox(width: 15.w),
-                                                  Text(
-                                                    contextCtr.bookingDetailsModel.value.status.toString().capitalizeFirst!,
-                                                    style: TextStyle(
-                                                      color: doneBorderCl,
-                                                      fontStyle: FontStyle.normal,
-                                                      fontSize: 18.sp,
-                                                      fontFamily: semiBold,
-                                                      fontWeight: FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        contextCtr.vendorBookingAccept(contextCtr.bookingDetailsModel.value.bookingId.toString(), "1");
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                                        decoration: BoxDecoration(color: appBar, borderRadius: BorderRadius.circular(10), border: Border.all(color: appBar)),
+                                        child: Center(
+                                          child: Text(
+                                            "Accept",
+                                            style: TextStyle(
+                                              color: whiteCl,
+                                              fontStyle: FontStyle.normal,
+                                              fontSize: 16.sp,
+                                              fontFamily: semiBold,
+                                              fontWeight: FontWeight.w400,
                                             ),
                                           ),
-                        SizedBox(height: 20.h),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : contextCtr.bookingDetailsModel.value.status == "cancelled"
+                                ? CustomButtonWidget(
+                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    style: CustomButtonStyle.style2,
+                                    onPressed: () {},
+                                    text: contextCtr.bookingDetailsModel.value.status.toString().capitalizeFirst.toString(),
+                                  )
+                                : contextCtr.bookingDetailsModel.value.status == "pending"
+                                    ? CustomButtonWidget(
+                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        style: CustomButtonStyle.style2,
+                                        onPressed: () async {
+                                          otp = "";
+                                          otpDialogShow("start", contextCtr.bookingDetailsModel.value.bookingId.toString());
+                                        },
+                                        text: 'Booking Start',
+                                      )
+                                    : contextCtr.bookingDetailsModel.value.status == "started"
+                                        ? CustomButtonWidget(
+                                            padding: const EdgeInsets.symmetric(vertical: 12),
+                                            style: CustomButtonStyle.style2,
+                                            onPressed: () async {
+                                              otp = "";
+                                              otpDialogShow("end", contextCtr.bookingDetailsModel.value.bookingId.toString());
+                                            },
+                                            text: 'Booking End',
+                                          )
+                                        : CustomButtonWidget(
+                                            padding: const EdgeInsets.symmetric(vertical: 12),
+                                            style: CustomButtonStyle.style2,
+                                            onPressed: () {},
+                                            text: contextCtr.bookingDetailsModel.value.status.toString().capitalizeFirst.toString(),
+                                          )
                       ],
-                    );
-                  }),
-                ),
-              ),
-            ),
-          );
-        });
+                    ),
+                  ),
+          ),
+        );
+      },
+    );
   }
 
   void otpDialogShow(String type, String booKingId) {
@@ -941,21 +866,20 @@ class _PaymentAndPatientDetailsScreenState extends State<PaymentAndPatientDetail
                         style: CustomButtonStyle.style2,
                         onPressed: () async {
                           if (type == "start") {
-                            var result= await controller.startBookingOtp(booKingId, otp);
+                            var result = await controller.startBookingOtp(booKingId, otp);
                             if (result.isNotEmpty && result[0] == true) {
                               otp = "";
-                               Get.back();
+                              Get.back();
                               successToast(result[1].toString());
                             } else {
                               Get.back();
                               errorToast(result.isNotEmpty ? result[1] : "Something went wrong");
                             }
-
                           } else {
-                            var result= await controller.endBookingOtp(booKingId, otp);
+                            var result = await controller.endBookingOtp(booKingId, otp);
                             if (result.isNotEmpty && result[0] == true) {
                               otp = "";
-                              Get.back();
+                              Get.to(() => const SuccessfullyCompleted());
                               successToast(result[1].toString());
                             } else {
                               Get.back();

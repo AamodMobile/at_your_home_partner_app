@@ -4,6 +4,7 @@ import 'package:at_your_home_partner/core/common_widgets/custom_buttons.dart';
 import 'package:at_your_home_partner/core/common_widgets/custom_input_fields.dart';
 import 'package:at_your_home_partner/model/city_model.dart';
 import 'package:at_your_home_partner/model/state_model.dart';
+import 'package:at_your_home_partner/screens/upload_doc_screen.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -147,6 +148,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             }
                             return null;
                           },
+                        ),
+                        SizedBox(height: 20.h),
+                        CustomTextField(
+                          txKeyboardType: TextInputType.emailAddress,
+                          labelWidget: Row(
+                            children: [
+                              Image.asset(
+                                iconEmail,
+                                height: 16.h,
+                                width: 16.w,
+                              ),
+                              SizedBox(width: 5.w),
+                              Text(
+                                "Email Address",
+                                style: TextStyle(
+                                  color: mainColor,
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 12.sp,
+                                  fontFamily: regular,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                          hintText: "Enter Email Address",
+                          validator: contextCtr.emailValidator,
                         ),
                         SizedBox(height: 20.h),
                         CustomTextField(
@@ -340,6 +367,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 if (value != null) {
                                   setState(() {
                                     controller.stateModel = value;
+                                    controller.stateId.value =controller.stateModel.value.toString();
                                     controller.cityListGet(controller.stateModel.value.toString());
                                   });
                                 }
@@ -438,6 +466,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 if (value != null) {
                                   setState(() {
                                     controller.cityModel = value;
+                                    controller.cityId.value = value.label.toString();
                                   });
                                 }
                               },
@@ -542,6 +571,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             return null;
                           },
                         ),
+                        SizedBox(height: 20.h),
+                        CustomTextField(
+                          txKeyboardType: TextInputType.text,
+                          labelWidget: Row(
+                            children: [
+                              Image.asset(
+                                userNewIc,
+                                height: 16.h,
+                                width: 16.w,
+                              ),
+                              SizedBox(width: 5.w),
+                              Text(
+                                "About Me",
+                                style: TextStyle(
+                                  color: mainColor,
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 12.sp,
+                                  fontFamily: regular,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                          hintText: "Enter About Me",
+                          controller: controller.aboutVendor,
+                          maxCheck: 5,
+                          validator: (v) {
+                            if (v!.isEmpty) {
+                              return "Enter About Me";
+                            }
+                            return null;
+                          },
+                        ),
                         SizedBox(height: 50.h),
                         Container(
                           height: 44,
@@ -551,7 +613,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             style: CustomButtonStyle.style2,
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                controller.registerApi();
+                                Get.to(() => const UploadDocScreen());
                               }
                             },
                             text: 'Continue',

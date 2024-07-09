@@ -13,14 +13,12 @@ class ApiService extends GetConnect {
   static var client = http.Client();
 
   static Future<http.Response> loginApi(
-    String vendorId,
     String mobile,
     String password,
     String deviceKey,
   ) async {
     http.Response response;
     var result = await ApiClient.postData(ApiUrl.login, body: {
-      'vendor_id': vendorId,
       'mobile_number': mobile.trim(),
       'password': password,
       'device_key': deviceKey,
@@ -29,7 +27,17 @@ class ApiService extends GetConnect {
     return response;
   }
 
-  static Future<http.Response> registerApi(
+  ///registerApi
+  static Future<dynamic> registerApi(
+    String aadharNo,
+    String panNo,
+    String medicalRegistrationNo,
+    String educationNo,
+    String aadharCardFront,
+    String aadharCardBack,
+    String panCard,
+    String medicalRegistrationDoc,
+    String educationDoc,
     String name,
     String mobile,
     String password,
@@ -41,23 +49,71 @@ class ApiService extends GetConnect {
     String pincode,
     String state,
     String city,
+    String aboutVendor,
+    String email,
   ) async {
+    var result;
     http.Response response;
-    var result = await ApiClient.postData(ApiUrl.register, body: {
-      'name': name.trim(),
-      'mobile_no': mobile.trim(),
-      'password': password,
-      'business_name': businessName,
-      'alternate_mobile': alternateMobile,
-      'device_key': deviceKey,
-      'experience': experience,
-      'address_line_1': addressLine,
-      'pincode': pincode,
-      'state': state,
-      'city': city,
-    });
-    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
-    return response;
+    try {
+      var url = ApiUrl.register;
+      Log.console('Http.Post Url: $url');
+      http.MultipartRequest request = http.MultipartRequest('POST', Uri.parse(url));
+      Log.console('Http.Post Headers: ${request.headers}');
+      request.fields['aadhar_no'] = aadharNo.trim();
+      request.fields['pan_no'] = panNo;
+      request.fields['medical_registration_no'] = medicalRegistrationNo;
+      request.fields['education_no'] = educationNo;
+      request.fields['name'] = name.trim();
+      request.fields['mobile_no'] = mobile.trim();
+      request.fields['password'] = password;
+      request.fields['business_name'] = businessName;
+      request.fields['alternate_mobile'] = alternateMobile;
+      request.fields['device_key'] = deviceKey;
+      request.fields['experience'] = experience;
+      request.fields['address_line_1'] = addressLine;
+      request.fields['pincode'] = pincode;
+      request.fields['state'] = state;
+      request.fields['city'] = city;
+      request.fields['about_vendor'] = aboutVendor;
+      request.fields['email'] = email;
+      if (aadharCardFront.isNotEmpty) {
+        http.MultipartFile file = await http.MultipartFile.fromPath('aadhar_card_front', aadharCardFront);
+        request.files.add(file);
+      }
+      if (aadharCardBack.isNotEmpty) {
+        http.MultipartFile file = await http.MultipartFile.fromPath('aadhar_card_back', aadharCardBack);
+        request.files.add(file);
+      }
+      if (panCard.isNotEmpty) {
+        http.MultipartFile file = await http.MultipartFile.fromPath('pan_card', panCard);
+        request.files.add(file);
+      }
+      if (medicalRegistrationDoc.isNotEmpty) {
+        http.MultipartFile file = await http.MultipartFile.fromPath('medical_registration_doc', medicalRegistrationDoc);
+        request.files.add(file);
+      }
+      if (educationDoc.isNotEmpty) {
+        http.MultipartFile file = await http.MultipartFile.fromPath('education_doc', educationDoc);
+        request.files.add(file);
+      }
+      Log.console('Http.Post filed: ${request.fields}');
+      response = await http.Response.fromStream(await request.send());
+      Log.console('Http.Response Body: ${response.body}');
+      if (response.statusCode == 200) {
+        result = jsonDecode(response.body);
+      } else if (response.statusCode == 404) {
+        result = {'status_code': 400, 'message': '404'};
+      } else if (response.statusCode == 401) {
+        result = jsonDecode(response.body);
+      }
+    } catch (e) {
+      result = http.Response(
+        jsonEncode({e.toString()}),
+        204,
+        headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'},
+      );
+    }
+    return result;
   }
 
   static Future<http.Response> vendorOnOff() async {
@@ -103,8 +159,6 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
-
-
 
   static Future<http.Response> vendorChangePassword(
     String oldPassword,
@@ -295,6 +349,7 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
+
   static Future<http.Response> vendorCancelledBooking(String bookingId) async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
@@ -310,6 +365,7 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
+
   static Future<http.Response> vendorAddBank(
     String bankName,
     String ifscCode,
@@ -574,12 +630,7 @@ class ApiService extends GetConnect {
     var token = instance.getString("currentToken");
     var crtData = instance.getString('currentUser');
     UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
-    var requestBody = {
-      'user_id': crtUser.data!.id.toString(),
-      'day': day,
-      'time_slots[]':timeSlots
-
-    };
+    var requestBody = {'user_id': crtUser.data!.id.toString(), 'day': day, 'time_slots[]': timeSlots};
     var result = await ApiClient.postData(
       ApiUrl.createTimeslots,
       headers: {
@@ -590,6 +641,7 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
+
   static Future<http.Response> paymentHistory() async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
@@ -608,6 +660,7 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
+
   static Future<http.Response> myService() async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
@@ -626,6 +679,7 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
+
   static Future<http.Response> serviceDelete(String serviceId) async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
@@ -645,6 +699,7 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
+
   static Future<http.Response> serviceDetails(String serviceId) async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
@@ -664,6 +719,7 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
+
   static Future<http.Response> startBooking(String bookingId) async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
@@ -679,7 +735,8 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
-  static Future<http.Response> startBookingOtp(String bookingId,String otp) async {
+
+  static Future<http.Response> startBookingOtp(String bookingId, String otp) async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
     var token = instance.getString('currentToken');
@@ -696,6 +753,7 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
+
   static Future<http.Response> endBooking(String bookingId) async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
@@ -711,7 +769,8 @@ class ApiService extends GetConnect {
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }
-  static Future<http.Response> endBookingOtp(String bookingId,String otp) async {
+
+  static Future<http.Response> endBookingOtp(String bookingId, String otp) async {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
     var token = instance.getString('currentToken');

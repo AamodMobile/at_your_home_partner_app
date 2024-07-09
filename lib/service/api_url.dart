@@ -1,6 +1,6 @@
 class ApiUrl {
-  static const String baseUrl = "https://atyourhome.co.in/atyourhome/api/auth/";
-  static const String imageUrl = "https://atyourhome.co.in/atyourhome/public/";
+  static const String baseUrl = "https://atyourhome.co.in/api/auth/";
+  static const String imageUrl = "https://atyourhome.co.in/public/";
   static const String login = "${baseUrl}vendor/login";
   static const String register = "${baseUrl}vendor/register";
   static const String vendorOnOff = "${baseUrl}vendor/vendor_on_off";
@@ -38,5 +38,6 @@ class ApiUrl {
   static const String startBookingOtp = "${baseUrl}vendor/verify-booking-otp";
   static const String endBooking = "${baseUrl}vendor/booking-otp";
   static const String endBookingOtp = "${baseUrl}vendor/verify-booking-otp";
+  static const String uploadDocuments = "${baseUrl}vendor/upload-documents";
 
 }

@@ -75,6 +75,12 @@ const iosBackIc = "assets/icons/ios_back_ic.png";
 const redLightGif = "assets/icons/red_light.gif";
 const arrowDropDown = "assets/icons/angle_down.png";
 const medicalKitIc = "assets/icons/medical_kit_ic.png";
+const timeNewIc = "assets/icons/time_new.png";
+const locationNewIc = "assets/icons/location_new.png";
+const arrowRightNew = "assets/icons/arrow_right_new.png";
+const userNewIc = "assets/icons/user_new.png";
+const genderNewIc = "assets/icons/gender_new.png";
+const galleryIc = "assets/icons/gallery_ic.png";
 //images
 const splash = "assets/images/splash.png";
 const loginBg = "assets/images/login_bg.png";

@@ -207,78 +207,80 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                                 ],
                               ),
                               SizedBox(height: 6.h),
-                              DropdownButtonHideUnderline(
-                                child: DropdownButton2<AllCategoryListModel?>(
-                                  buttonStyleData: ButtonStyleData(
-                                    height: 45,
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.only(left: 14, right: 14),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: borderColorCont,
+                              Obx(
+                                () => DropdownButtonHideUnderline(
+                                  child: DropdownButton2<AllCategoryListModel?>(
+                                    buttonStyleData: ButtonStyleData(
+                                      height: 45,
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.only(left: 14, right: 14),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: borderColorCont,
+                                        ),
+                                        color: Colors.white,
                                       ),
-                                      color: Colors.white,
                                     ),
-                                  ),
-                                  iconStyleData: const IconStyleData(
-                                    icon: ImageIcon(
-                                      AssetImage(arrowDropDown),
-                                      size: 12,
+                                    iconStyleData: const IconStyleData(
+                                      icon: ImageIcon(
+                                        AssetImage(arrowDropDown),
+                                        size: 12,
+                                      ),
+                                      iconSize: 14,
+                                      iconEnabledColor: Colors.black,
+                                      iconDisabledColor: Colors.grey,
                                     ),
-                                    iconSize: 14,
-                                    iconEnabledColor: Colors.black,
-                                    iconDisabledColor: Colors.grey,
-                                  ),
-                                  dropdownStyleData: DropdownStyleData(
-                                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                                    maxHeight: 200,
-                                    width: MediaQuery.of(context).size.width * 0.90,
-                                    useSafeArea: true,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14),
-                                      color: Colors.white,
+                                    dropdownStyleData: DropdownStyleData(
+                                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                                      maxHeight: 200,
+                                      width: MediaQuery.of(context).size.width * 0.90,
+                                      useSafeArea: true,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                        color: Colors.white,
+                                      ),
+                                      scrollbarTheme: ScrollbarThemeData(
+                                        radius: const Radius.circular(40),
+                                        thickness: MaterialStateProperty.all(6),
+                                        thumbVisibility: MaterialStateProperty.all(true),
+                                      ),
                                     ),
-                                    scrollbarTheme: ScrollbarThemeData(
-                                      radius: const Radius.circular(40),
-                                      thickness: MaterialStateProperty.all(6),
-                                      thumbVisibility: MaterialStateProperty.all(true),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      height: 45,
+                                      padding: EdgeInsets.only(left: 14, right: 14),
                                     ),
-                                  ),
-                                  menuItemStyleData: const MenuItemStyleData(
-                                    height: 45,
-                                    padding: EdgeInsets.only(left: 14, right: 14),
-                                  ),
-                                  isDense: true,
-                                  value: contextCtr.allCategoryListModel,
-                                  hint: const Text(
-                                    "Select Category",
-                                    style: TextStyle(fontWeight: FontWeight.w400, color: Color.fromRGBO(166, 166, 166, 0.7), fontFamily: regular, fontSize: 12, fontStyle: FontStyle.normal),
-                                  ),
-                                  style: const TextStyle(color: Colors.white60, fontSize: 13, fontWeight: FontWeight.bold),
-                                  isExpanded: true,
-                                  items: contextCtr.allCategoryList
-                                      .map((s) => DropdownMenuItem<AllCategoryListModel>(
-                                            value: s,
-                                            child: Text(
-                                              "${s.label}",
-                                              style: const TextStyle(
-                                                fontFamily: regular,
-                                                color: blackCl,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
+                                    isDense: true,
+                                    value: contextCtr.allCategoryListModel,
+                                    hint: const Text(
+                                      "Select Category",
+                                      style: TextStyle(fontWeight: FontWeight.w400, color: Color.fromRGBO(166, 166, 166, 0.7), fontFamily: regular, fontSize: 12, fontStyle: FontStyle.normal),
+                                    ),
+                                    style: const TextStyle(color: Colors.white60, fontSize: 13, fontWeight: FontWeight.bold),
+                                    isExpanded: true,
+                                    items: contextCtr.allCategoryList
+                                        .map((s) => DropdownMenuItem<AllCategoryListModel>(
+                                              value: s,
+                                              child: Text(
+                                                "${s.label}",
+                                                style: const TextStyle(
+                                                  fontFamily: regular,
+                                                  color: blackCl,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
-                                            ),
-                                          ))
-                                      .toList(),
-                                  onChanged: (AllCategoryListModel? value) {
-                                    if (value != null) {
-                                      setState(() {
-                                        contextCtr.allCategoryListModel = value;
-                                        contextCtr.subCategoryListGet(contextCtr.allCategoryListModel.value.toString());
-                                      });
-                                    }
-                                  },
+                                            ))
+                                        .toList(),
+                                    onChanged: (AllCategoryListModel? value) {
+                                      if (value != null) {
+                                        setState(() {
+                                          contextCtr.allCategoryListModel = value;
+                                          contextCtr.subCategoryListGet(contextCtr.allCategoryListModel.value.toString());
+                                        });
+                                      }
+                                    },
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 20.h),
@@ -303,78 +305,80 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                                 ],
                               ),
                               SizedBox(height: 6.h),
-                              DropdownButtonHideUnderline(
-                                child: DropdownButton2<SubCategoryListModel?>(
-                                  buttonStyleData: ButtonStyleData(
-                                    height: 45,
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.only(left: 14, right: 14),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: borderColorCont,
+                              Obx(
+                                () => DropdownButtonHideUnderline(
+                                  child: DropdownButton2<SubCategoryListModel?>(
+                                    buttonStyleData: ButtonStyleData(
+                                      height: 45,
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.only(left: 14, right: 14),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: borderColorCont,
+                                        ),
+                                        color: Colors.white,
                                       ),
-                                      color: Colors.white,
                                     ),
-                                  ),
-                                  iconStyleData: const IconStyleData(
-                                    icon: ImageIcon(
-                                      AssetImage(arrowDropDown),
-                                      size: 12,
+                                    iconStyleData: const IconStyleData(
+                                      icon: ImageIcon(
+                                        AssetImage(arrowDropDown),
+                                        size: 12,
+                                      ),
+                                      iconSize: 14,
+                                      iconEnabledColor: Colors.black,
+                                      iconDisabledColor: Colors.grey,
                                     ),
-                                    iconSize: 14,
-                                    iconEnabledColor: Colors.black,
-                                    iconDisabledColor: Colors.grey,
-                                  ),
-                                  dropdownStyleData: DropdownStyleData(
-                                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                                    maxHeight: 200,
-                                    width: MediaQuery.of(context).size.width * 0.90,
-                                    useSafeArea: true,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14),
-                                      color: Colors.white,
+                                    dropdownStyleData: DropdownStyleData(
+                                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                                      maxHeight: 200,
+                                      width: MediaQuery.of(context).size.width * 0.90,
+                                      useSafeArea: true,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                        color: Colors.white,
+                                      ),
+                                      scrollbarTheme: ScrollbarThemeData(
+                                        radius: const Radius.circular(40),
+                                        thickness: MaterialStateProperty.all(6),
+                                        thumbVisibility: MaterialStateProperty.all(true),
+                                      ),
                                     ),
-                                    scrollbarTheme: ScrollbarThemeData(
-                                      radius: const Radius.circular(40),
-                                      thickness: MaterialStateProperty.all(6),
-                                      thumbVisibility: MaterialStateProperty.all(true),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      height: 45,
+                                      padding: EdgeInsets.only(left: 14, right: 14),
                                     ),
-                                  ),
-                                  menuItemStyleData: const MenuItemStyleData(
-                                    height: 45,
-                                    padding: EdgeInsets.only(left: 14, right: 14),
-                                  ),
-                                  isDense: true,
-                                  value: contextCtr.subCategoryListModel,
-                                  hint: const Text(
-                                    "Select Sub-Category",
-                                    style: TextStyle(fontWeight: FontWeight.w400, color: Color.fromRGBO(166, 166, 166, 0.7), fontFamily: regular, fontSize: 12, fontStyle: FontStyle.normal),
-                                  ),
-                                  style: const TextStyle(color: Colors.white60, fontSize: 13, fontWeight: FontWeight.bold),
-                                  isExpanded: true,
-                                  items: contextCtr.subCategoryList
-                                      .map((s) => DropdownMenuItem<SubCategoryListModel>(
-                                            value: s,
-                                            child: Text(
-                                              s.label.toString(),
-                                              style: const TextStyle(
-                                                fontFamily: regular,
-                                                color: blackCl,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
+                                    isDense: true,
+                                    value: contextCtr.subCategoryListModel,
+                                    hint: const Text(
+                                      "Select Sub-Category",
+                                      style: TextStyle(fontWeight: FontWeight.w400, color: Color.fromRGBO(166, 166, 166, 0.7), fontFamily: regular, fontSize: 12, fontStyle: FontStyle.normal),
+                                    ),
+                                    style: const TextStyle(color: Colors.white60, fontSize: 13, fontWeight: FontWeight.bold),
+                                    isExpanded: true,
+                                    items: contextCtr.subCategoryList
+                                        .map((s) => DropdownMenuItem<SubCategoryListModel>(
+                                              value: s,
+                                              child: Text(
+                                                s.label.toString(),
+                                                style: const TextStyle(
+                                                  fontFamily: regular,
+                                                  color: blackCl,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
-                                            ),
-                                          ))
-                                      .toList(),
-                                  onChanged: (SubCategoryListModel? value) {
-                                    if (value != null) {
-                                      setState(() {
-                                        contextCtr.subCategoryListModel = value;
-                                        contextCtr.serviceListGet(contextCtr.allCategoryListModel.value.toString(), contextCtr.subCategoryListModel.value.toString());
-                                      });
-                                    }
-                                  },
+                                            ))
+                                        .toList(),
+                                    onChanged: (SubCategoryListModel? value) {
+                                      if (value != null) {
+                                        setState(() {
+                                          contextCtr.subCategoryListModel = value;
+                                          contextCtr.serviceListGet(contextCtr.allCategoryListModel.value.toString(), contextCtr.subCategoryListModel.value.toString());
+                                        });
+                                      }
+                                    },
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 20.h),
@@ -399,114 +403,149 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                                 ],
                               ),
                               SizedBox(height: 6.h),
-                              DropdownButtonHideUnderline(
-                                child: DropdownButton2<ServiceListModel>(
-                                  buttonStyleData: ButtonStyleData(
-                                    height: 45,
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.only(left: 14, right: 14),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: borderColorCont,
+                              CustomMultiSelectDropdown(
+                                items: controller.serviceList,
+                                selectedItems: controller.selectedServiceList,
+                                onChanged: (selectedItems) {
+                                  setState(() {
+                                    controller.selectedServiceList.value = selectedItems;
+                                  });
+                                },
+                                controller: contextCtr,
+                              ),
+                              /*  Obx(() {
+                                return DropdownButtonHideUnderline(
+                                  child: DropdownButton2<ServiceListModel>(
+                                    buttonStyleData: ButtonStyleData(
+                                      height: 45,
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.only(left: 14, right: 14),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: borderColorCont,
+                                        ),
+                                        color: Colors.white,
                                       ),
-                                      color: Colors.white,
                                     ),
-                                  ),
-                                  iconStyleData: const IconStyleData(
-                                    icon: ImageIcon(
-                                      AssetImage(arrowDropDown),
-                                      size: 12,
+                                    iconStyleData: const IconStyleData(
+                                      icon: ImageIcon(
+                                        AssetImage(arrowDropDown),
+                                        size: 12,
+                                      ),
+                                      iconSize: 14,
+                                      iconEnabledColor: Colors.black,
+                                      iconDisabledColor: Colors.grey,
                                     ),
-                                    iconSize: 14,
-                                    iconEnabledColor: Colors.black,
-                                    iconDisabledColor: Colors.grey,
-                                  ),
-                                  dropdownStyleData: DropdownStyleData(
-                                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                                    maxHeight: 200,
-                                    width: MediaQuery.of(context).size.width * 0.90,
-                                    useSafeArea: true,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14),
-                                      color: Colors.white,
+                                    dropdownStyleData: DropdownStyleData(
+                                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                                      maxHeight: 200,
+                                      width: MediaQuery.of(context).size.width * 0.90,
+                                      useSafeArea: true,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                        color: Colors.white,
+                                      ),
+                                      scrollbarTheme: ScrollbarThemeData(
+                                        radius: const Radius.circular(40),
+                                        thickness: MaterialStateProperty.all(6),
+                                        thumbVisibility: MaterialStateProperty.all(true),
+                                      ),
                                     ),
-                                    scrollbarTheme: ScrollbarThemeData(
-                                      radius: const Radius.circular(40),
-                                      thickness: MaterialStateProperty.all(6),
-                                      thumbVisibility: MaterialStateProperty.all(true),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      height: 45,
+                                      padding: EdgeInsets.only(left: 14, right: 14),
                                     ),
-                                  ),
-                                  menuItemStyleData: const MenuItemStyleData(
-                                    height: 45,
-                                    padding: EdgeInsets.only(left: 14, right: 14),
-                                  ),
-                                  isDense: true,
-                                  hint: const Text(
-                                    "Select Services",
-                                    style: TextStyle(fontWeight: FontWeight.w400, color: Color.fromRGBO(166, 166, 166, 0.7), fontFamily: regular, fontSize: 12, fontStyle: FontStyle.normal),
-                                  ),
-                                  style: const TextStyle(color: Colors.white60, fontSize: 13, fontWeight: FontWeight.bold),
-                                  isExpanded: true,
-                                  items: contextCtr.serviceList.map((item) {
-                                    return DropdownMenuItem(
-                                      value: item,
-                                      enabled: false,
-                                      child: StatefulBuilder(
-                                        builder: (context, menuSetState) {
-                                          final isSelected = contextCtr.selectedService.contains(item.value.toString());
-                                          return InkWell(
-                                            onTap: () {
-                                              isSelected ? contextCtr.selectedService.remove(item.value.toString()) : contextCtr.selectedService.add(item.value.toString());
-                                              setState(() {});
-                                              menuSetState(() {});
-                                            },
-                                            child: Container(
-                                              height: double.infinity,
-                                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                              child: Row(
-                                                children: [
-                                                  if (isSelected)
-                                                    const Icon(
-                                                      Icons.check_box_outlined,
-                                                      color: mainColor,
-                                                    )
-                                                  else
-                                                    const Icon(Icons.check_box_outline_blank),
-                                                  const SizedBox(width: 16),
-                                                  Expanded(
-                                                    child: Text(
-                                                      item.label.toString(),
-                                                      style: TextStyle(fontFamily: regular, fontSize: 16, fontWeight: FontWeight.w500, color: isSelected ? mainColor : blackCl),
+                                    isDense: true,
+                                    hint: const Text(
+                                      "Select Services",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        color: Color.fromRGBO(166, 166, 166, 0.7),
+                                        fontFamily: regular,
+                                        fontSize: 12,
+                                        fontStyle: FontStyle.normal,
+                                      ),
+                                    ),
+                                    style: const TextStyle(color: Colors.white60, fontSize: 13, fontWeight: FontWeight.bold),
+                                    isExpanded: true,
+                                    items: controller.serviceList.map((item) {
+                                      return DropdownMenuItem(
+                                        value: item,
+                                        child: StatefulBuilder(
+                                          builder: (context, menuSetState) {
+                                            final isSelected = controller.selectedService.contains(item.value.toString());
+                                            return InkWell(
+                                              onTap: () {
+                                                if (isSelected) {
+                                                  controller.selectedService.remove(item.value.toString());
+                                                  controller.selectedServiceList.remove(item);
+                                                } else {
+                                                  controller.selectedService.add(item.value.toString());
+                                                  controller.selectedServiceList.add(item);
+                                                }
+                                                menuSetState(() {});
+                                              },
+                                              child: Container(
+                                                height: double.infinity,
+                                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                child: Row(
+                                                  children: [
+                                                    isSelected
+                                                        ? const Icon(
+                                                            Icons.check_box_outlined,
+                                                            color: mainColor,
+                                                          )
+                                                        : const Icon(Icons.check_box_outline_blank),
+                                                    const SizedBox(width: 16),
+                                                    Expanded(
+                                                      child: Text(
+                                                        item.label.toString(),
+                                                        style: TextStyle(
+                                                          fontFamily: regular,
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.w500,
+                                                          color: isSelected ? mainColor : blackCl,
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    }).toList(),
+                                    value: controller.selectedServiceList.isEmpty ? null : controller.selectedServiceList.last,
+                                    // Remove .last
+                                    onChanged: (value) {
+                                      // No need to handle onChanged as we manage selection in onTap
+                                    },
+                                    selectedItemBuilder: (context) {
+                                      // Custom display of selected items
+                                      if (controller.selectedServiceList.isNotEmpty) {
+                                        return controller.selectedServiceList.map((item) {
+                                          return Container(
+                                            alignment: AlignmentDirectional.center,
+                                            child: Text(
+                                              item.label.toString(),
+                                              style: const TextStyle(
+                                                fontFamily: 'regular',
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: blackCl,
                                               ),
                                             ),
                                           );
-                                        },
-                                      ),
-                                    );
-                                  }).toList(),
-                                  value: contextCtr.selectedServiceList.isEmpty ? null : contextCtr.selectedServiceList.last,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      print(value!.toString());
-                                    });
-                                  },
-                                  selectedItemBuilder: (context) {
-                                    return contextCtr.selectedServiceList.map((item) {
-                                      return Container(
-                                        alignment: AlignmentDirectional.center,
-                                        child: Text(
-                                          item.label.toString(),
-                                          style: const TextStyle(fontFamily: regular, fontSize: 16, fontWeight: FontWeight.w500, color: blackCl),
-                                        ),
-                                      );
-                                    }).toList();
-                                  },
-                                ),
-                              ),
+                                        }).toList();
+                                      } else {
+                                        return [Container()]; // Return an empty list or widget if nothing selected
+                                      }
+                                    },
+                                  ),
+                                );
+                              }),*/
                               SizedBox(height: 20.h),
                               Text(
                                 "Add images Patient",
@@ -575,7 +614,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                             ],
                           )
                         : Builder(builder: (context) {
-                            if (controller.isLoading) {
+                            if (contextCtr.isLoading.value) {
                               return Center(
                                 child: SizedBox(
                                   height: MediaQuery.of(context).size.height - 200,
@@ -751,7 +790,6 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                               errorToast("Select Service ");
                             } else {
                               var result = await controller.createService(contextCtr.allCategoryListModel.value.toString(), contextCtr.subCategoryListModel.value.toString());
-
                               if (result.isNotEmpty && result[0]) {
                                 setState(() {
                                   selectedTimeSlot = 1;
@@ -779,6 +817,125 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                 ),
               ),
             ),
+          );
+        });
+  }
+}
+
+class CustomMultiSelectDropdown extends StatelessWidget {
+  final List<ServiceListModel> items;
+  final RxList<ServiceListModel> selectedItems;
+  final ValueChanged<List<ServiceListModel>> onChanged;
+  final AddServiceController controller;
+
+  const CustomMultiSelectDropdown({
+    super.key,
+    required this.items,
+    required this.selectedItems,
+    required this.onChanged,
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonHideUnderline(
+      child: InkWell(
+        onTap: () => _showMultiSelectDialog(context),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: borderColorCont),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          child: Obx(() => Text(
+                _buildSelectedItemsText(),
+                style: selectedItems.isEmpty
+                    ? const TextStyle(fontWeight: FontWeight.w400, color: Color.fromRGBO(166, 166, 166, 0.7), fontFamily: regular, fontSize: 14 , fontStyle: FontStyle.normal)
+                    : const TextStyle(
+                        fontFamily: regular,
+                        color: blackCl,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+              )),
+        ),
+      ),
+    );
+  }
+
+  String _buildSelectedItemsText() {
+    if (selectedItems.isEmpty) {
+      return "Select Services";
+    } else {
+      return selectedItems.map((item) => item.label.toString()).join(", ");
+    }
+  }
+
+  void _showMultiSelectDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                title: const Text(
+                  "Select Services",
+                  style: TextStyle(
+                    fontFamily: regular,
+                    color: blackCl,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                backgroundColor: Colors.white,
+                surfaceTintColor: Colors.white,
+                content: Container(
+                  width: double.maxFinite,
+                  decoration: const BoxDecoration(color: Colors.white),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: items.map((item) {
+                      bool isSelected = selectedItems.contains(item);
+                      return ListTile(
+                        title: Text(item.label.toString()),
+                        leading: isSelected ? const Icon(Icons.check_box) : const Icon(Icons.check_box_outline_blank),
+                        onTap: () {
+                          setState(() {
+                            if (isSelected) {
+                              controller.selectedService.remove(item.value.toString());
+                              controller.selectedServiceList.remove(item);
+                              selectedItems.remove(item);
+                            } else {
+                              controller.selectedService.add(item.value.toString());
+                              controller.selectedServiceList.add(item);
+                              selectedItems.add(item);
+                            }
+                            onChanged(selectedItems.toList());
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text(
+                      "Done",
+                      style: TextStyle(
+                        fontFamily: regular,
+                        color: blackCl,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
           );
         });
   }

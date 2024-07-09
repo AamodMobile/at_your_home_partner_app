@@ -4,6 +4,7 @@ import 'package:at_your_home_partner/core/common_widgets/custom_buttons.dart';
 import 'package:at_your_home_partner/core/common_widgets/custom_input_fields.dart';
 import 'package:at_your_home_partner/screens/forgot_password_screen.dart';
 import 'package:at_your_home_partner/screens/sign_up_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -82,36 +83,39 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     SizedBox(height: 30.h),
-                    CustomTextField(
-                      txKeyboardType: TextInputType.text,
-                      labelWidget: Row(
-                        children: [
-                          Image.asset(
-                            idIc,
-                            height: 16.h,
-                            width: 16.w,
-                          ),
-                          SizedBox(width: 5.w),
-                          Text(
-                            "Vendor ID",
-                            style: TextStyle(
-                              color: mainColor,
-                              fontStyle: FontStyle.normal,
-                              fontSize: 12.sp,
-                              fontFamily: regular,
-                              fontWeight: FontWeight.w400,
+                    Visibility(
+                      visible: false,
+                      child: CustomTextField(
+                        txKeyboardType: TextInputType.text,
+                        labelWidget: Row(
+                          children: [
+                            Image.asset(
+                              idIc,
+                              height: 16.h,
+                              width: 16.w,
                             ),
-                          ),
-                        ],
+                            SizedBox(width: 5.w),
+                            Text(
+                              "Vendor ID",
+                              style: TextStyle(
+                                color: mainColor,
+                                fontStyle: FontStyle.normal,
+                                fontSize: 12.sp,
+                                fontFamily: regular,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                        hintText: "Enter Vendor ID",
+                        controller: controller.vendorId,
+                        validator: (v) {
+                          if (v!.isEmpty) {
+                            return "Enter Vendor ID";
+                          }
+                          return null;
+                        },
                       ),
-                      hintText: "Enter Vendor ID",
-                      controller: controller.vendorId,
-                      validator: (v) {
-                        if (v!.isEmpty) {
-                          return "Enter Vendor ID";
-                        }
-                        return null;
-                      },
                     ),
                     SizedBox(height: 30.h),
                     CustomTextField(

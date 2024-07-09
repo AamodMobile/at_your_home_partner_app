@@ -29,6 +29,7 @@ class UserData {
   dynamic vendorId;
   String? mobile;
   String? email;
+  String? status;
   String? pincode;
   String? profileImage;
   String? deviceKey;
@@ -54,6 +55,7 @@ class UserData {
     this.vendorId,
     this.mobile,
     this.email,
+    this.status,
     this.pincode,
     this.profileImage,
     this.deviceKey,
@@ -80,6 +82,7 @@ class UserData {
     vendorId = json['vendor_id'] ?? 0;
     mobile = json['mobile_no'] ?? "";
     email = json['email'] ?? "";
+    status = json['status'] ?? "";
     pincode = json['pincode'] ?? "";
     profileImage = json['profile_image'] ?? "";
     deviceKey = json['device_key'] ?? "";
@@ -108,6 +111,7 @@ class UserData {
     data['vendor_id'] = vendorId;
     data['mobile_no'] = mobile;
     data['email'] = email;
+    data['status'] = status;
     data['pincode'] = pincode;
     data['profile_image'] = profileImage;
     data['device_key'] = deviceKey;

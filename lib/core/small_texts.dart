@@ -1,6 +1,7 @@
 
 
 import 'package:at_your_home_partner/constants/constants.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class SmallTexts extends StatelessWidget {
   final Color? color;
@@ -19,7 +20,8 @@ class SmallTexts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return
+    /*  Text(
       text,
       maxLines: maxline,
       style: TextStyle(
@@ -28,19 +30,19 @@ class SmallTexts extends StatelessWidget {
           fontStyle: FontStyle.normal,
           fontFamily: regular,
           color: color),
-    );
+    );*/
 
-    /*   Html(
+    Html(
       data:text,
       shrinkWrap: true,
       style: {
         "body": Style(
-          fontSize: const FontSize(10.0),
+          fontSize: FontSize(10.0),
           fontWeight: FontWeight.w600,
-          fontFamily: medium,
-          color: Colors.white,
+          fontFamily: regular,
+          color: color,
         ),
       },
-    );*/
+    );
   }
 }
