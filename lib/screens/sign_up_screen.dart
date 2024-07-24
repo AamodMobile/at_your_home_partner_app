@@ -152,6 +152,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         SizedBox(height: 20.h),
                         CustomTextField(
                           txKeyboardType: TextInputType.emailAddress,
+                          controller: contextCtr.email,
                           labelWidget: Row(
                             children: [
                               Image.asset(
@@ -466,7 +467,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 if (value != null) {
                                   setState(() {
                                     controller.cityModel = value;
-                                    controller.cityId.value = value.label.toString();
+                                    controller.cityId.value = value.value.toString();
                                   });
                                 }
                               },

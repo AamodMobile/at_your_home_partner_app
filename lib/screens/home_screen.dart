@@ -23,7 +23,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List type = [
     "All Booking",
-    "Pending",
+    "Requested",
+    "Accepted",
+    "Started",
     "Completed",
     "Cancelled",
   ];
@@ -38,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     /* WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getDialogAlert();
     });*/
-
+    controller.selectedIndex = 0;
     super.initState();
   }
 
@@ -234,8 +236,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             : (contextCtrl.selectedIndex == 1)
                                 ? contextCtrl.pendingList.isEmpty
                                 : (contextCtrl.selectedIndex == 2)
-                                    ? contextCtrl.completedList.isEmpty
-                                    : contextCtrl.cancelledList.isEmpty)
+                                    ? contextCtrl.acceptedList.isEmpty
+                                    : (contextCtrl.selectedIndex == 3)
+                                        ? contextCtrl.startedList.isEmpty
+                                        : (contextCtrl.selectedIndex == 4)
+                                            ? contextCtrl.completedList.isEmpty
+                                            : contextCtrl.cancelledList.isEmpty)
                         ? Column(
                             children: [
                               SizedBox(height: 85.h),
@@ -286,9 +292,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     currentList = contextCtrl.pendingList;
                                     break;
                                   case 2:
-                                    currentList = contextCtrl.completedList;
+                                    currentList = contextCtrl.acceptedList;
                                     break;
                                   case 3:
+                                    currentList = contextCtrl.startedList;
+                                    break;
+                                  case 4:
+                                    currentList = contextCtrl.completedList;
+                                    break;
+                                  case 5:
                                     currentList = contextCtrl.cancelledList;
                                     break;
                                   default:
@@ -365,21 +377,20 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         margin: EdgeInsets.only(bottom: 9.h, right: 16.w, left: 16.w),
         decoration: BoxDecoration(
-          color: whiteCl,
-          borderRadius: BorderRadius.circular(10.dm),
-          border: Border.all(color: const Color(0xFF6AAE74), width: 1),
+            color: whiteCl,
+            borderRadius: BorderRadius.circular(10.dm),
+            border: Border.all(color: const Color(0xFF6AAE74), width: 1),
             gradient: const LinearGradient(colors: [
               Color(0xFFF6FFF8),
               Color(0xFFFFFFFF),
-            ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
-        ),
+            ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(height: 9.h),
             Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 9.w),
+              padding: EdgeInsets.symmetric(horizontal: 9.w),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -392,7 +403,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       border: Border.all(color: mainColor.withOpacity(0.23), width: 0.5),
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    child: Image.asset(timeNewIc,fit: BoxFit.cover,),
+                    child: Image.asset(
+                      timeNewIc,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   SizedBox(width: 10.w),
                   Column(
@@ -439,74 +453,74 @@ class _HomeScreenState extends State<HomeScreen> {
                   const Spacer(),
                   bookingData.status == "Accept"
                       ? Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                    decoration: BoxDecoration(
-                      color: blueLightCl,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: blueLightCl, width: 0.5),
-                    ),
-                    child: Row(
-                      children: [
-                        Image.asset(outlineDirectionsIc, height: 16.h, width: 16.w),
-                        SizedBox(width: 6.w),
-                        Text(
-                          "Get directions",
-                          style: TextStyle(
-                            color: whiteCl,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 10.sp,
-                            fontFamily: regular,
-                            fontWeight: FontWeight.w400,
+                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                          decoration: BoxDecoration(
+                            color: blueLightCl,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: blueLightCl, width: 0.5),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
+                          child: Row(
+                            children: [
+                              Image.asset(outlineDirectionsIc, height: 16.h, width: 16.w),
+                              SizedBox(width: 6.w),
+                              Text(
+                                "Get directions",
+                                style: TextStyle(
+                                  color: whiteCl,
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 10.sp,
+                                  fontFamily: regular,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       : Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 5.h),
-                    decoration: BoxDecoration(
-                        color: bookingData.status == "requested"
-                            ? pendingCl
-                            : bookingData.status == "cancelled"
-                            ? cancelCl
-                            : doneCl,
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                            color: bookingData.status == "requested"
-                                ? pendingBorderCl
-                                : bookingData.status == "cancelled"
-                                ? cancelBorderCl
-                                : doneBorderCl,
-                            width: 0.5)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                            bookingData.status == "requested"
-                                ? clockTime
-                                : bookingData.status == "cancelled"
-                                ? outlineCancel
-                                : ggCheck,
-                            height: 12.h,
-                            width: 12.w),
-                        SizedBox(width: 3.w),
-                        Text(
-                          bookingData.status.toString().capitalizeFirst!,
-                          style: TextStyle(
-                            color: bookingData.status == "requested"
-                                ? pendingBorderCl
-                                : bookingData.status == "cancelled"
-                                ? cancelBorderCl
-                                : doneBorderCl,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 10.sp,
-                            fontFamily: regular,
-                            fontWeight: FontWeight.w400,
+                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 5.h),
+                          decoration: BoxDecoration(
+                              color: bookingData.status == "requested"
+                                  ? pendingCl
+                                  : bookingData.status == "cancelled"
+                                      ? cancelCl
+                                      : doneCl,
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                  color: bookingData.status == "requested"
+                                      ? pendingBorderCl
+                                      : bookingData.status == "cancelled"
+                                          ? cancelBorderCl
+                                          : doneBorderCl,
+                                  width: 0.5)),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                  bookingData.status == "requested"
+                                      ? clockTime
+                                      : bookingData.status == "cancelled"
+                                          ? outlineCancel
+                                          : ggCheck,
+                                  height: 12.h,
+                                  width: 12.w),
+                              SizedBox(width: 3.w),
+                              Text(
+                                bookingData.status.toString().capitalizeFirst!,
+                                style: TextStyle(
+                                  color: bookingData.status == "requested"
+                                      ? pendingBorderCl
+                                      : bookingData.status == "cancelled"
+                                          ? cancelBorderCl
+                                          : doneBorderCl,
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 10.sp,
+                                  fontFamily: regular,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -517,7 +531,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 12.h),
             Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 9.w),
+              padding: EdgeInsets.symmetric(horizontal: 9.w),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -530,7 +544,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       border: Border.all(color: mainColor.withOpacity(0.23), width: 0.5),
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    child: Image.asset(locationNewIc,fit: BoxFit.cover,),
+                    child: Image.asset(
+                      locationNewIc,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   SizedBox(width: 10.w),
                   Column(
@@ -570,7 +587,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 6.h),
             Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 9.w),
+              padding: EdgeInsets.symmetric(horizontal: 9.w),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -579,17 +596,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 36.w,
                     padding: EdgeInsets.all(5.w),
                     decoration: BoxDecoration(color: whiteCl, border: Border.all(color: mainColor.withOpacity(0.23), width: 0.5), borderRadius: BorderRadius.circular(5)),
-                    child:  bookingData.serviceDetails!.bannerImage != ""
+                    child: bookingData.serviceDetails != null && bookingData.serviceDetails!.bannerImage != ""
                         ? CachedNetworkImage(
-                      errorWidget: (context, url, error) => Image.asset(drDemoImg, fit: BoxFit.fill, height: 82.h, width: 82.w),
-                      fit: BoxFit.fill,
-                      height: 82.h,
-                      width: 82.w,
-                      imageUrl: ApiUrl.imageUrl +  bookingData.serviceDetails!.bannerImage.toString(),
-                      placeholder: (a, b) => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
+                            errorWidget: (context, url, error) => Image.asset(drDemoImg, fit: BoxFit.fill, height: 82.h, width: 82.w),
+                            fit: BoxFit.fill,
+                            height: 82.h,
+                            width: 82.w,
+                            imageUrl: ApiUrl.imageUrl + bookingData.serviceDetails!.bannerImage.toString(),
+                            placeholder: (a, b) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
                         : Image.asset(injectionIc),
                   ),
                   SizedBox(width: 7.w),
@@ -598,7 +615,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        bookingData.serviceDetails!.title.toString(),
+                        bookingData.bookingDetails != null ? "${bookingData.bookingDetails!.length} service add" : "",
                         style: TextStyle(
                           color: const Color(0xFF002C07),
                           fontStyle: FontStyle.normal,
@@ -614,21 +631,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: const Color(0xFF454545),
                           fontStyle: FontStyle.normal,
                           fontSize: 12.sp,
-                            fontFamily: regular,
+                          fontFamily: regular,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
                   ),
                   const Spacer(),
-                  Image.asset(arrowRightNew,height: 24.h,width: 24.w,)
-
+                  Image.asset(
+                    arrowRightNew,
+                    height: 24.h,
+                    width: 24.w,
+                  )
                 ],
               ),
             ),
             SizedBox(height: 9.h),
-
-
           ],
         ),
       ),
@@ -805,7 +823,7 @@ class AlertDialog extends StatelessWidget {
                               SizedBox(width: 13.w),
                               Expanded(
                                 child: Text(
-                                  "Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016",
+                                  "Yashmak Nagar 1st Block 1st Cross, Murthy nagar, Bangalore-560016",
                                   style: TextStyle(
                                     color: blackCl,
                                     fontStyle: FontStyle.normal,

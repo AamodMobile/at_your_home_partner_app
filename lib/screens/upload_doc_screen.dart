@@ -24,7 +24,6 @@ class _UploadDocScreenState extends State<UploadDocScreen> {
     return GetBuilder(
       init: Get.find<LoginController>(),
       initState: (state) {
-        Get.find<LoginController>().statesList();
       },
       builder: (contextCtr) {
         return SafeArea(

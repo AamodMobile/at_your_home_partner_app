@@ -218,7 +218,7 @@ class _MyIncomeScreenState extends State<MyIncomeScreen> {
                                     color: whiteCl,
                                   ),
                                   child: Text(
-                                    "Total Month \n₹ ${contextCtr.paymentModel.monthIncome.toString()}",
+                                    "Total Month \n₹ ${contextCtr.paymentModel.monthIncome??""}",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: const Color(0xFF807E7E),
@@ -318,11 +318,11 @@ class _MyIncomeScreenState extends State<MyIncomeScreen> {
                 Builder(
                   builder: (context) {
                     if (controller.isLoading) {
-                      return Center(
+                      return const Center(
                         child: SizedBox(
                           height: 300,
                           width: 400,
-                          child: const Center(
+                          child: Center(
                             child: CircularProgressIndicator(
                               color: mainColor,
                             ),
@@ -364,7 +364,7 @@ class _MyIncomeScreenState extends State<MyIncomeScreen> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        contextCtr.paymentHistoryList[index].serviceName.toString(),
+                                        contextCtr.paymentHistoryList[index].bookingDetail!.serviceName??"",
                                         style: TextStyle(
                                           color: blackCl,
                                           fontStyle: FontStyle.normal,
@@ -377,7 +377,7 @@ class _MyIncomeScreenState extends State<MyIncomeScreen> {
                                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                                         decoration: BoxDecoration(color: lightFillCl, borderRadius: BorderRadius.circular(4)),
                                         child: Text(
-                                          contextCtr.paymentHistoryList[index].paymentType.toString(),
+                                          contextCtr.paymentHistoryList[index].bookingDetail!.paymentType.toString(),
                                           style: TextStyle(
                                             color: appBar,
                                             fontStyle: FontStyle.normal,
@@ -397,7 +397,7 @@ class _MyIncomeScreenState extends State<MyIncomeScreen> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "₹ ${contextCtr.paymentHistoryList[index].totalPaybleAmt.toString()}",
+                                        "₹ ${contextCtr.paymentHistoryList[index].bookingDetail?.totalPaybleAmt.toString()}",
                                         style: TextStyle(
                                           color: blackCl,
                                           fontStyle: FontStyle.normal,
@@ -407,8 +407,8 @@ class _MyIncomeScreenState extends State<MyIncomeScreen> {
                                         ),
                                       ),
                                       Text(
-                                      contextCtr.paymentHistoryList[index].paymentId==""?"":
-                                        "Tr. ID. ${contextCtr.paymentHistoryList[index].paymentId.toString()}",
+                                      contextCtr.paymentHistoryList[index].bookingDetail?.paymentId==""?"":
+                                        "Tr. ID. ${contextCtr.paymentHistoryList[index].bookingDetail?.paymentId.toString()}",
                                         style: TextStyle(
                                           color: blackCl,
                                           fontStyle: FontStyle.normal,
@@ -451,7 +451,7 @@ class _MyIncomeScreenState extends State<MyIncomeScreen> {
                                           ),
                                           SizedBox(height: 2.h),
                                           Text(
-                                            "${contextCtr.paymentHistoryList[index].deliveryDate.toString()}, ${contextCtr.paymentHistoryList[index].deliveryTime.toString()}",
+                                            "${contextCtr.paymentHistoryList[index].bookingDetail?.deliveryDate.toString()}, ${contextCtr.paymentHistoryList[index].bookingDetail?.deliveryTime.toString()}",
                                             style: TextStyle(
                                               color: blackCl,
                                               fontStyle: FontStyle.normal,

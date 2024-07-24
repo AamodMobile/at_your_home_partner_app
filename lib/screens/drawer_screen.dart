@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:at_your_home_partner/constants/constants.dart';
 import 'package:at_your_home_partner/controller/user_controller.dart';
-import 'package:at_your_home_partner/screens/chnage_password_screen.dart';
+import 'package:at_your_home_partner/screens/change_password_screen.dart';
 import 'package:at_your_home_partner/screens/cms_screen.dart';
+import 'package:at_your_home_partner/screens/feedback_screen.dart';
 import 'package:at_your_home_partner/screens/login_screen.dart';
 import 'package:at_your_home_partner/screens/my_income_screen.dart';
 import 'package:at_your_home_partner/screens/my_service_screen.dart';
@@ -42,7 +43,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
             decoration: const BoxDecoration(
               color: whiteCl,
             ),
-            child: Column(
+            child: SingleChildScrollView(child:
+            Column(
               children: [
                 GestureDetector(
                   onTap: () {
@@ -158,6 +160,15 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 contColumn(
                   function: () {
                     Get.back();
+                    Get.to(() => const FeedbackScreen());
+                  },
+                  assetImg: walletD,
+                  tittle: "Feedback",
+                  isHide: false,
+                ),
+                contColumn(
+                  function: () {
+                    Get.back();
                     Get.to(() => const ChangePasswordScreen());
                   },
                   assetImg: passwordIc,
@@ -219,7 +230,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 ),
               ],
             ),
-          ),
+          ),),
           Positioned(
               right: 10,
               top: 0,

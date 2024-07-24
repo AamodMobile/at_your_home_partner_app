@@ -1,6 +1,6 @@
 import 'package:at_your_home_partner/constants/colors.dart';
-import 'package:at_your_home_partner/core/common_widgets/vertical_calander/utils/date_models.dart';
-import 'package:at_your_home_partner/core/common_widgets/vertical_calander/utils/date_utils.dart';
+import 'package:at_your_home_partner/core/common_widgets/vertical_calender/utils/date_models.dart';
+import 'package:at_your_home_partner/core/common_widgets/vertical_calender/utils/date_utils.dart';
 import 'package:flutter/material.dart' hide DateUtils;
 import 'package:flutter/rendering.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';

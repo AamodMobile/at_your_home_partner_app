@@ -4,7 +4,6 @@ import 'package:at_your_home_partner/core/common_widgets/custom_buttons.dart';
 import 'package:at_your_home_partner/core/common_widgets/custom_input_fields.dart';
 import 'package:at_your_home_partner/screens/forgot_password_screen.dart';
 import 'package:at_your_home_partner/screens/sign_up_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends StatefulWidget {

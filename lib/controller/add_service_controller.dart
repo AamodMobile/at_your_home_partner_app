@@ -23,7 +23,7 @@ class AddServiceController extends GetxController {
   var selectedDateValue = "0".obs;
   var selectedTimeSlot = <String>[].obs;
   var selectedService = <String>[].obs;
-  var selectedServiceList = <ServiceListModel>[].obs;
+  var selectedServiceList = <String>[].obs;
   var timeSlotList = <TimeSlotData>[].obs;
   var timeSlotListModel;
 
@@ -124,6 +124,7 @@ class AddServiceController extends GetxController {
   Future<List<dynamic>> createService(String categoryId, String subcategoryId) async {
     try {
       showProgress();
+      print(selectedService);
       var result = await ApiService.createService(patientImages, categoryId, subcategoryId, selectedService);
       if (result["status"] == true) {
         closeProgress();

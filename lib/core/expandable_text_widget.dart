@@ -1,6 +1,6 @@
+import 'package:at_your_home_partner/constants/constants.dart';
 import 'package:at_your_home_partner/core/small_texts.dart';
 
-import '../constants/constants.dart';
 
 class ExpandableTextWidget extends StatefulWidget {
   final String text;

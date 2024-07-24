@@ -39,5 +39,6 @@ class ApiUrl {
   static const String endBooking = "${baseUrl}vendor/booking-otp";
   static const String endBookingOtp = "${baseUrl}vendor/verify-booking-otp";
   static const String uploadDocuments = "${baseUrl}vendor/upload-documents";
+  static const String myRatings = "${baseUrl}vendor/my-ratings";
 
 }

@@ -9,6 +9,7 @@ class MyServiceListModel {
   String? subDescription;
   String? price;
   String? status;
+  dynamic avgRating;
 
   MyServiceListModel({
     this.id,
@@ -21,6 +22,7 @@ class MyServiceListModel {
     this.subDescription,
     this.price,
     this.status,
+    this.avgRating,
   });
 
   factory MyServiceListModel.fromJson(Map<String, dynamic> json) => MyServiceListModel(
@@ -34,6 +36,7 @@ class MyServiceListModel {
     subDescription: json["sub_description"],
     price: json["price"],
     status: json["status"],
+    avgRating: json["avg_rating"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -47,5 +50,6 @@ class MyServiceListModel {
     "sub_description": subDescription,
     "price": price,
     "status": status,
+    "avg_rating": avgRating,
   };
 }

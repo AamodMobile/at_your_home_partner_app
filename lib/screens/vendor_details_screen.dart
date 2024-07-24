@@ -1,10 +1,8 @@
-
 import 'package:at_your_home_partner/constants/constants.dart';
 import 'package:at_your_home_partner/controller/my_service_controller.dart';
 import 'package:at_your_home_partner/service/api_logs.dart';
 import 'package:at_your_home_partner/service/api_url.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,8 +11,8 @@ class VendorDetailsScreen extends StatefulWidget {
   final String serviceId;
   final String price;
   final String serviceTitle;
-  const VendorDetailsScreen(
-      {super.key, required this.serviceId,required this.serviceTitle, required this.price});
+
+  const VendorDetailsScreen({super.key, required this.serviceId, required this.serviceTitle, required this.price});
 
   @override
   State<VendorDetailsScreen> createState() => _VendorDetailsScreenState();
@@ -22,7 +20,12 @@ class VendorDetailsScreen extends StatefulWidget {
 
 class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
   MyServiceController controller = Get.put(MyServiceController());
-
+  List type = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+@override
+  void initState() {
+  controller.selectedIndex=0;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -84,7 +87,7 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
                         )),
                       );
                     }
-                 if (contextCtr.serviceDetailsModel == null) {
+                    if (contextCtr.serviceDetailsModel == null) {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -116,10 +119,10 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
                     return Column(
                       children: [
                         SizedBox(width: MediaQuery.of(context).size.width),
-                        ClipRRect(
+                      /*  ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child:
-                          /*contextCtr.serviceDetailsModel.vendorImages != ""
+                              *//*contextCtr.serviceDetailsModel.vendorImages != ""
                               ? CachedNetworkImage(
                                   errorWidget: (context, url, error) => Image.asset(drDemoImg, fit: BoxFit.fill, height: 82.h, width: 82.w),
                                   fit: BoxFit.fill,
@@ -130,8 +133,8 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
                                     child: CircularProgressIndicator(),
                                   ),
                                 )
-                              : */
-                          Image.asset(drDemoImg, height: 116.h, width: 116.w),
+                              : *//*
+                              Image.asset(drDemoImg, height: 116.h, width: 116.w),
                         ),
                         SizedBox(height: 18.h),
                         Row(
@@ -176,7 +179,7 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 20.h),
+                        SizedBox(height: 20.h),*/
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                           decoration: BoxDecoration(color: const Color(0xFFFFECDB), borderRadius: BorderRadius.circular(7), border: Border.all(color: const Color(0xFFE2C9B3))),
@@ -211,8 +214,8 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
                                     ),
                                   ),
                                   SizedBox(width: 10.w),
-                                  Text(
-                                  "  ${contextCtr.serviceDetailsModel.serviceDetail!.subcategoryName.toString()} (${widget.serviceTitle.toString()})",
+                                 Expanded(child:  Text(
+                                    "  ${contextCtr.serviceDetailsModel.serviceDetail!.subcategoryName.toString()} (${widget.serviceTitle.toString()})",
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontStyle: FontStyle.normal,
@@ -220,7 +223,7 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
                                       fontFamily: regular,
                                       fontWeight: FontWeight.w400,
                                     ),
-                                  ),
+                                  ),)
                                 ],
                               )
                             ],
@@ -230,7 +233,7 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "About Me",
+                            "Description",
                             style: TextStyle(
                               color: Colors.black,
                               fontStyle: FontStyle.normal,
@@ -244,7 +247,7 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Html(
-                            data: contextCtr.serviceDetailsModel.aboutVendor??"",
+                            data: contextCtr.serviceDetailsModel.aboutVendor ?? "",
                             style: {
                               "body": Style(
                                 fontSize: FontSize(12),
@@ -257,7 +260,7 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
                           ),
                         ),
                         SizedBox(height: 16.h),
-                       /* Row(
+                        /* Row(
                           children: [
                             Image.asset(
                               clockTime,
@@ -279,6 +282,136 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
                           ],
                         ),*/
                         SizedBox(height: 16.h),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Time Slot by Days ",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontStyle: FontStyle.normal,
+                              fontSize: 18.sp,
+                              fontFamily: regular,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16.h),
+                        Container(
+                          height: 40.h,
+                          padding: EdgeInsets.only(top: 10.h, right: 5.w, left: 5.w, bottom: 5.h),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(color: whiteCl),
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: type.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          contextCtr.selectedIndex = index;
+                                        });
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            type[index],
+                                            style: TextStyle(
+                                              color: contextCtr.selectedIndex == index ? mainColor : const Color(0xFF807E7E),
+                                              fontStyle: FontStyle.normal,
+                                              fontSize: 14.sp,
+                                              fontFamily: regular,
+                                              fontWeight: contextCtr.selectedIndex == index ? FontWeight.w600 : FontWeight.w400,
+                                            ),
+                                          ),
+                                          contextCtr.selectedIndex == index
+                                              ? Container(
+                                            width: 47.w,
+                                            height: 2,
+                                            color: mainColor,
+                                          )
+                                              : SizedBox(width: 47.w)
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }),
+                        ),
+                        SizedBox(
+                          height: 16.h,
+                        ),
+                        isSlotEmpty(contextCtr.selectedIndex)
+                            ? Column(
+                          children: [
+                            Text(
+                              "Time Slot Not Added on this day.",
+                              style: TextStyle(
+                                color: blackCl,
+                                fontStyle: FontStyle.normal,
+                                fontSize: 16.sp,
+                                fontFamily: semiBold,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        )
+                            : GridView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.only(right: 36.w),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10.0,
+                            crossAxisSpacing: 14.0,
+                            childAspectRatio: 4,
+                          ),
+                          itemCount: contextCtr.selectedIndex == 0
+                              ? contextCtr.serviceDetailsModel.timeSlots?.sunSlots?.length
+                              : contextCtr.selectedIndex == 1
+                              ? contextCtr.serviceDetailsModel.timeSlots?.monSlots?.length
+                              : contextCtr.selectedIndex == 2
+                              ? contextCtr.serviceDetailsModel.timeSlots?.tueSlots?.length
+                              : contextCtr.selectedIndex == 3
+                              ? contextCtr.serviceDetailsModel.timeSlots?.wedSlots?.length
+                              : contextCtr.selectedIndex == 4
+                              ? contextCtr.serviceDetailsModel.timeSlots?.thuSlots?.length
+                              : contextCtr.selectedIndex == 5
+                              ? contextCtr.serviceDetailsModel.timeSlots?.friSlots?.length
+                              : contextCtr.serviceDetailsModel.timeSlots?.satSlots?.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              padding: EdgeInsets.symmetric(horizontal: 9.w, vertical: 9.h),
+                              decoration: BoxDecoration(
+                                color: mainColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  contextCtr.selectedIndex == 0
+                                      ? contextCtr.serviceDetailsModel.timeSlots!.sunSlots![index].timeslots.toString()
+                                      : contextCtr.selectedIndex == 1
+                                      ? contextCtr.serviceDetailsModel.timeSlots!.monSlots![index].timeslots.toString()
+                                      : contextCtr.selectedIndex == 2
+                                      ? contextCtr.serviceDetailsModel.timeSlots!.tueSlots![index].timeslots.toString()
+                                      : contextCtr.selectedIndex == 3
+                                      ? contextCtr.serviceDetailsModel.timeSlots!.wedSlots![index].timeslots.toString()
+                                      : contextCtr.selectedIndex == 0
+                                      ? contextCtr.serviceDetailsModel.timeSlots!.thuSlots![index].timeslots.toString()
+                                      : contextCtr.selectedIndex == 5
+                                      ? contextCtr.serviceDetailsModel.timeSlots!.friSlots![index].timeslots.toString()
+                                      : contextCtr.serviceDetailsModel.timeSlots!.satSlots![index].timeslots.toString(),
+                                  style: TextStyle(
+                                    color: whiteCl,
+                                    fontFamily: regular,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                         SizedBox(height: 16.h),
                         Align(
                           alignment: Alignment.centerLeft,
@@ -346,27 +479,27 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
                                         )
                                       : ClipRRect(
                                           borderRadius: BorderRadius.circular(5),
-                                          child:  contextCtr.serviceDetailsModel.vendorImages![index].image != ""
+                                          child: contextCtr.serviceDetailsModel.vendorImages![index].image != ""
                                               ? CachedNetworkImage(
-                                            errorWidget: (context, url, error) => Image.asset(demoPatientImg, fit: BoxFit.fill, height: 82.h, width: 82.w),
-                                            fit: BoxFit.fill,
-                                            height: 50,
-                                            width: 50,
-                                            imageUrl: ApiUrl.imageUrl + contextCtr.serviceDetailsModel.vendorImages![index].image.toString(),
-                                            placeholder: (a, b) => const Center(
-                                              child: CircularProgressIndicator(),
-                                            ),
-                                          )
-                                              :
-                                          Image.asset(
-                                            demoPatientImg,
-                                            height: 50,
-                                            width: 50,
-                                            fit: BoxFit.fill,
-                                          ),
+                                                  errorWidget: (context, url, error) => Image.asset(demoPatientImg, fit: BoxFit.fill, height: 82.h, width: 82.w),
+                                                  fit: BoxFit.fill,
+                                                  height: 50,
+                                                  width: 50,
+                                                  imageUrl: ApiUrl.imageUrl + contextCtr.serviceDetailsModel.vendorImages![index].image.toString(),
+                                                  placeholder: (a, b) => const Center(
+                                                    child: CircularProgressIndicator(),
+                                                  ),
+                                                )
+                                              : Image.asset(
+                                                  demoPatientImg,
+                                                  height: 50,
+                                                  width: 50,
+                                                  fit: BoxFit.fill,
+                                                ),
                                         );
                                 },
                               ),
+
                         SizedBox(height: 25.h),
                         Visibility(
                           visible: false,
@@ -384,8 +517,7 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: () {
-                                },
+                                onTap: () {},
                                 child: Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(
@@ -535,5 +667,28 @@ class _VendorDetailsScreenState extends State<VendorDetailsScreen> {
             ),
           );
         });
+  }
+
+  bool isSlotEmpty(int selectedIndex) {
+    final timeSlots = controller.serviceDetailsModel.timeSlots;
+
+    switch (selectedIndex) {
+      case 0:
+        return timeSlots?.sunSlots?.isEmpty ?? true;
+      case 1:
+        return timeSlots?.monSlots?.isEmpty ?? true;
+      case 2:
+        return timeSlots?.tueSlots?.isEmpty ?? true;
+      case 3:
+        return timeSlots?.wedSlots?.isEmpty ?? true;
+      case 4:
+        return timeSlots?.thuSlots?.isEmpty ?? true;
+      case 5:
+        return timeSlots?.friSlots?.isEmpty ?? true;
+      case 6:
+        return timeSlots?.satSlots?.isEmpty ?? true;
+      default:
+        return true;
+    }
   }
 }

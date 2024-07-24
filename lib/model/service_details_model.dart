@@ -1,8 +1,9 @@
+
 class ServiceDetailsModel {
   int? id;
   String? vendorId;
   String? businessName;
-  dynamic aboutVendor;
+  String? aboutVendor;
   String? medicalRegistration;
   ServiceDetail? serviceDetail;
   TimeSlots? timeSlots;
@@ -103,20 +104,20 @@ class TimeSlots {
   String? vendorId;
   String? sun;
   String? mon;
-  dynamic tue;
-  dynamic wed;
-  dynamic thu;
+  String? tue;
+  String? wed;
+  String? thu;
   String? fri;
-  dynamic sat;
+  String? sat;
   DateTime? createdAt;
   DateTime? updatedAt;
   List<Slot>? sunSlots;
   List<Slot>? monSlots;
-  dynamic tueSlots;
-  dynamic wedSlots;
-  dynamic thuSlots;
+  List<Slot>? tueSlots;
+  List<Slot>? wedSlots;
+  List<Slot>? thuSlots;
   List<Slot>? friSlots;
-  dynamic satSlots;
+  List<Slot>? satSlots;
 
   TimeSlots({
     this.id,
@@ -149,13 +150,15 @@ class TimeSlots {
     thu: json["thu"],
     fri: json["fri"],
     sat: json["sat"],
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     sunSlots: json["sun_slots"] == null ? [] : List<Slot>.from(json["sun_slots"]!.map((x) => Slot.fromJson(x))),
     monSlots: json["mon_slots"] == null ? [] : List<Slot>.from(json["mon_slots"]!.map((x) => Slot.fromJson(x))),
-    tueSlots: json["tue_slots"],
-    wedSlots: json["wed_slots"],
-    thuSlots: json["thu_slots"],
+    tueSlots: json["tue_slots"] == null ? [] : List<Slot>.from(json["tue_slots"]!.map((x) => Slot.fromJson(x))),
+    wedSlots: json["wed_slots"] == null ? [] : List<Slot>.from(json["wed_slots"]!.map((x) => Slot.fromJson(x))),
+    thuSlots: json["thu_slots"] == null ? [] : List<Slot>.from(json["thu_slots"]!.map((x) => Slot.fromJson(x))),
     friSlots: json["fri_slots"] == null ? [] : List<Slot>.from(json["fri_slots"]!.map((x) => Slot.fromJson(x))),
-    satSlots: json["sat_slots"],
+    satSlots: json["sat_slots"] == null ? [] : List<Slot>.from(json["sat_slots"]!.map((x) => Slot.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -168,13 +171,15 @@ class TimeSlots {
     "thu": thu,
     "fri": fri,
     "sat": sat,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
     "sun_slots": sunSlots == null ? [] : List<dynamic>.from(sunSlots!.map((x) => x.toJson())),
     "mon_slots": monSlots == null ? [] : List<dynamic>.from(monSlots!.map((x) => x.toJson())),
-    "tue_slots": tueSlots,
-    "wed_slots": wedSlots,
-    "thu_slots": thuSlots,
+    "tue_slots": tueSlots == null ? [] : List<dynamic>.from(tueSlots!.map((x) => x.toJson())),
+    "wed_slots": wedSlots == null ? [] : List<dynamic>.from(wedSlots!.map((x) => x.toJson())),
+    "thu_slots": thuSlots == null ? [] : List<dynamic>.from(thuSlots!.map((x) => x.toJson())),
     "fri_slots": friSlots == null ? [] : List<dynamic>.from(friSlots!.map((x) => x.toJson())),
-    "sat_slots": satSlots,
+    "sat_slots": satSlots == null ? [] : List<dynamic>.from(satSlots!.map((x) => x.toJson())),
   };
 }
 
@@ -182,6 +187,8 @@ class Slot {
   int? id;
   dynamic daySlotId;
   String? timeslots;
+  DateTime? createdAt;
+  DateTime? updatedAt;
   dynamic metaTitle;
   dynamic metaTag;
   dynamic metaDescription;
@@ -192,6 +199,8 @@ class Slot {
     this.id,
     this.daySlotId,
     this.timeslots,
+    this.createdAt,
+    this.updatedAt,
     this.metaTitle,
     this.metaTag,
     this.metaDescription,
@@ -203,6 +212,8 @@ class Slot {
     id: json["id"],
     daySlotId: json["day_slot_id"],
     timeslots: json["timeslots"],
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     metaTitle: json["meta_title"],
     metaTag: json["meta_tag"],
     metaDescription: json["meta_description"],
@@ -214,6 +225,8 @@ class Slot {
     "id": id,
     "day_slot_id": daySlotId,
     "timeslots": timeslots,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
     "meta_title": metaTitle,
     "meta_tag": metaTag,
     "meta_description": metaDescription,

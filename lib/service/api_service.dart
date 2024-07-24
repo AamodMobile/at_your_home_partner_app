@@ -512,8 +512,7 @@ class ApiService extends GetConnect {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
     var token = instance.getString("currentToken");
-    var crtData = instance.getString('currentUser');
-    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    instance.getString('currentUser');
     var result = await ApiClient.postData(
       ApiUrl.subCategoryList,
       headers: {
@@ -584,7 +583,7 @@ class ApiService extends GetConnect {
       }
       if (serviceId.isNotEmpty) {
         for (int i = 0; i < serviceId.length; i++) {
-          request.fields['service_id[]'] = serviceId[i];
+          request.fields['service_id[$i]'] = serviceId[i];
         }
       }
       Log.console('Http.Post filed: ${request.fields}');
@@ -611,8 +610,7 @@ class ApiService extends GetConnect {
     http.Response response;
     var instance = await SharedPreferences.getInstance();
     var token = instance.getString("currentToken");
-    var crtData = instance.getString('currentUser');
-    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    instance.getString('currentUser');
     var result = await ApiClient.postData(
       ApiUrl.timeSlotsList,
       headers: {
@@ -784,6 +782,23 @@ class ApiService extends GetConnect {
       'otp': otp,
       'type': "end_otp",
     });
+    response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
+    return response;
+  }
+
+  static Future<http.Response> myRatings() async {
+    http.Response response;
+    var instance = await SharedPreferences.getInstance();
+    var token = instance.getString("currentToken");
+    var crtData = instance.getString('currentUser');
+    UserModel crtUser = UserModel.fromJson(jsonDecode(crtData!));
+    var result = await ApiClient.postData(
+      ApiUrl.myRatings,
+      headers: {"Authorization": "Bearer$token"},
+      body: {
+        'vendor_id': crtUser.data!.id.toString(),
+      },
+    );
     response = http.Response(jsonEncode(result), 200, headers: {HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'});
     return response;
   }

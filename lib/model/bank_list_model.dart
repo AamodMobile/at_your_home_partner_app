@@ -1,4 +1,3 @@
-
 class BankListModel {
   int? id;
   String? vendorId;

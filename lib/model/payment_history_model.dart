@@ -33,17 +33,63 @@ class PaymentModel {
 
 class PaymentHistoryModel {
   int? id;
+  String? vendorId;
+  String? bookingId;
+  String? commision;
+  String? commisionAmount;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  BookingDetail? bookingDetail;
+
+  PaymentHistoryModel({
+    this.id,
+    this.vendorId,
+    this.bookingId,
+    this.commision,
+    this.commisionAmount,
+    this.createdAt,
+    this.updatedAt,
+    this.bookingDetail,
+  });
+
+  factory PaymentHistoryModel.fromJson(Map<String, dynamic> json) => PaymentHistoryModel(
+    id: json["id"],
+    vendorId: json["vendor_id"],
+    bookingId: json["booking_id"],
+    commision: json["commision"],
+    commisionAmount: json["commision_amount"],
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    bookingDetail: json["booking_detail"] == null ? null : BookingDetail.fromJson(json["booking_detail"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "vendor_id": vendorId,
+    "booking_id": bookingId,
+    "commision": commision,
+    "commision_amount": commisionAmount,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+    "booking_detail": bookingDetail?.toJson(),
+  };
+}
+
+class BookingDetail {
+  int? id;
   String? userId;
   String? patientId;
   String? categoryId;
-  String? subcategoryId;
-  String? serviceId;
-  String? servicePrice;
-  String? serviceName;
+  dynamic subcategoryId;
+  dynamic serviceId;
+  dynamic servicePrice;
+  dynamic serviceName;
   String? vendorId;
   String? bookingId;
   String? addressId;
   String? totalAmount;
+  String? gst;
+  String? taxes;
   String? deliveryDate;
   String? deliveryTime;
   dynamic assignTo;
@@ -53,7 +99,10 @@ class PaymentHistoryModel {
   String? isBookingStarted;
   dynamic cancelledId;
   dynamic cancelledDate;
-  dynamic paymentId;
+  String? paymentId;
+  String? paymentStatus;
+  String? transactionId;
+  String? invoiceId;
   String? paymentType;
   dynamic isProduct;
   String? totalPaybleAmt;
@@ -67,22 +116,19 @@ class PaymentHistoryModel {
   DateTime? createdAt;
   DateTime? updatedAt;
   dynamic couponCode;
-  String? discountAmount;
+  dynamic discountAmount;
   dynamic isWallet;
   dynamic walletAmount;
-  dynamic startOtp;
-  dynamic endOtp;
+  String? startOtp;
+  String? endOtp;
   dynamic startDate;
   dynamic endDate;
   dynamic serviceTime;
   dynamic extraTime;
   dynamic extraAmount;
-  PatientDetails? patientDetails;
-  ServiceDetails? serviceDetails;
   Category? category;
-  Category? subcategory;
 
-PaymentHistoryModel({
+  BookingDetail({
     this.id,
     this.userId,
     this.patientId,
@@ -95,6 +141,8 @@ PaymentHistoryModel({
     this.bookingId,
     this.addressId,
     this.totalAmount,
+    this.gst,
+    this.taxes,
     this.deliveryDate,
     this.deliveryTime,
     this.assignTo,
@@ -105,6 +153,9 @@ PaymentHistoryModel({
     this.cancelledId,
     this.cancelledDate,
     this.paymentId,
+    this.paymentStatus,
+    this.transactionId,
+    this.invoiceId,
     this.paymentType,
     this.isProduct,
     this.totalPaybleAmt,
@@ -128,13 +179,10 @@ PaymentHistoryModel({
     this.serviceTime,
     this.extraTime,
     this.extraAmount,
-    this.patientDetails,
-    this.serviceDetails,
     this.category,
-    this.subcategory,
   });
 
-  factory PaymentHistoryModel.fromJson(Map<String, dynamic> json) => PaymentHistoryModel(
+  factory BookingDetail.fromJson(Map<String, dynamic> json) => BookingDetail(
     id: json["id"],
     userId: json["user_id"],
     patientId: json["patient_id"],
@@ -147,6 +195,8 @@ PaymentHistoryModel({
     bookingId: json["booking_id"],
     addressId: json["address_id"],
     totalAmount: json["total_amount"],
+    gst: json["gst"],
+    taxes: json["taxes"],
     deliveryDate: json["delivery_date"],
     deliveryTime: json["delivery_time"],
     assignTo: json["assign_to"],
@@ -156,7 +206,10 @@ PaymentHistoryModel({
     isBookingStarted: json["is_booking_started"],
     cancelledId: json["cancelled_id"],
     cancelledDate: json["cancelled_date"],
-    paymentId: json["payment_id"]??"",
+    paymentId: json["payment_id"],
+    paymentStatus: json["payment_status"],
+    transactionId: json["transaction_id"],
+    invoiceId: json["invoice_id"],
     paymentType: json["payment_type"],
     isProduct: json["is_product"],
     totalPaybleAmt: json["total_payble_amt"],
@@ -180,10 +233,7 @@ PaymentHistoryModel({
     serviceTime: json["service_time"],
     extraTime: json["extra_time"],
     extraAmount: json["extra_amount"],
-    patientDetails: json["patient_details"] == null ? null : PatientDetails.fromJson(json["patient_details"]),
-    serviceDetails: json["service_details"] == null ? null : ServiceDetails.fromJson(json["service_details"]),
     category: json["category"] == null ? null : Category.fromJson(json["category"]),
-    subcategory: json["subcategory"] == null ? null : Category.fromJson(json["subcategory"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -199,6 +249,8 @@ PaymentHistoryModel({
     "booking_id": bookingId,
     "address_id": addressId,
     "total_amount": totalAmount,
+    "gst": gst,
+    "taxes": taxes,
     "delivery_date": deliveryDate,
     "delivery_time": deliveryTime,
     "assign_to": assignTo,
@@ -209,6 +261,9 @@ PaymentHistoryModel({
     "cancelled_id": cancelledId,
     "cancelled_date": cancelledDate,
     "payment_id": paymentId,
+    "payment_status": paymentStatus,
+    "transaction_id": transactionId,
+    "invoice_id": invoiceId,
     "payment_type": paymentType,
     "is_product": isProduct,
     "total_payble_amt": totalPaybleAmt,
@@ -232,10 +287,7 @@ PaymentHistoryModel({
     "service_time": serviceTime,
     "extra_time": extraTime,
     "extra_amount": extraAmount,
-    "patient_details": patientDetails?.toJson(),
-    "service_details": serviceDetails?.toJson(),
     "category": category?.toJson(),
-    "subcategory": subcategory?.toJson(),
   };
 }
 
@@ -257,8 +309,6 @@ class Category {
   dynamic metaTag;
   dynamic metaDescription;
   String? slug;
-  String? categoryId;
-  String? categoryName;
 
   Category({
     this.id,
@@ -278,8 +328,6 @@ class Category {
     this.metaTag,
     this.metaDescription,
     this.slug,
-    this.categoryId,
-    this.categoryName,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
@@ -300,8 +348,6 @@ class Category {
     metaTag: json["meta_tag"],
     metaDescription: json["meta_description"],
     slug: json["slug"],
-    categoryId: json["category_id"],
-    categoryName: json["category_name"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -322,151 +368,6 @@ class Category {
     "meta_tag": metaTag,
     "meta_description": metaDescription,
     "slug": slug,
-    "category_id": categoryId,
-    "category_name": categoryName,
   };
 }
 
-class PatientDetails {
-  int? id;
-  String? userId;
-  String? name;
-  String? age;
-  String? gender;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  List<dynamic>? prescriptionImage;
-
-  PatientDetails({
-    this.id,
-    this.userId,
-    this.name,
-    this.age,
-    this.gender,
-    this.createdAt,
-    this.updatedAt,
-    this.prescriptionImage,
-  });
-
-  factory PatientDetails.fromJson(Map<String, dynamic> json) => PatientDetails(
-    id: json["id"],
-    userId: json["user_id"],
-    name: json["name"],
-    age: json["age"],
-    gender: json["gender"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-    prescriptionImage: json["prescription_image"] == null ? [] : List<dynamic>.from(json["prescription_image"]!.map((x) => x)),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "user_id": userId,
-    "name": name,
-    "age": age,
-    "gender": gender,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-    "prescription_image": prescriptionImage == null ? [] : List<dynamic>.from(prescriptionImage!.map((x) => x)),
-  };
-}
-
-class ServiceDetails {
-  int? id;
-  String? languageId;
-  dynamic vendorId;
-  String? categoryId;
-  String? categoryName;
-  String? subcategoryId;
-  String? subcategoryName;
-  String? bannerImage;
-  String? title;
-  String? slug;
-  dynamic link;
-  String? image;
-  String? status;
-  String? subDescription;
-  String? description;
-  dynamic benefit;
-  String? price;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  dynamic metaTitle;
-  dynamic metaTag;
-  dynamic metaDescription;
-
-  ServiceDetails({
-    this.id,
-    this.languageId,
-    this.vendorId,
-    this.categoryId,
-    this.categoryName,
-    this.subcategoryId,
-    this.subcategoryName,
-    this.bannerImage,
-    this.title,
-    this.slug,
-    this.link,
-    this.image,
-    this.status,
-    this.subDescription,
-    this.description,
-    this.benefit,
-    this.price,
-    this.createdAt,
-    this.updatedAt,
-    this.metaTitle,
-    this.metaTag,
-    this.metaDescription,
-  });
-
-  factory ServiceDetails.fromJson(Map<String, dynamic> json) => ServiceDetails(
-    id: json["id"],
-    languageId: json["language_id"],
-    vendorId: json["vendor_id"],
-    categoryId: json["category_id"],
-    categoryName: json["category_name"],
-    subcategoryId: json["subcategory_id"],
-    subcategoryName: json["subcategory_name"],
-    bannerImage: json["banner_image"],
-    title: json["title"],
-    slug: json["slug"],
-    link: json["link"],
-    image: json["image"],
-    status: json["status"],
-    subDescription: json["sub_description"],
-    description: json["description"],
-    benefit: json["benefit"],
-    price: json["price"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-    metaTitle: json["meta_title"],
-    metaTag: json["meta_tag"],
-    metaDescription: json["meta_description"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "language_id": languageId,
-    "vendor_id": vendorId,
-    "category_id": categoryId,
-    "category_name": categoryName,
-    "subcategory_id": subcategoryId,
-    "subcategory_name": subcategoryName,
-    "banner_image": bannerImage,
-    "title": title,
-    "slug": slug,
-    "link": link,
-    "image": image,
-    "status": status,
-    "sub_description": subDescription,
-    "description": description,
-    "benefit": benefit,
-    "price": price,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-    "meta_title": metaTitle,
-    "meta_tag": metaTag,
-    "meta_description": metaDescription,
-  };
-}

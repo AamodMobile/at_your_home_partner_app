@@ -10,7 +10,7 @@ class MyServiceController extends GetxController implements GetxService {
   bool isLoading = false;
   var myServiceList = <MyServiceListModel>[];
   var serviceDetailsModel = ServiceDetailsModel();
-
+  int selectedIndex = 0;
   Future<void> myServiceGet() async {
     isLoading = true;
     myServiceList.clear();

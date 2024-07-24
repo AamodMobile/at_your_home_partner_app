@@ -9,7 +9,6 @@ import 'package:at_your_home_partner/screens/create_new_password_screen.dart';
 import 'package:at_your_home_partner/screens/login_screen.dart';
 import 'package:at_your_home_partner/screens/otp_screen.dart';
 import 'package:at_your_home_partner/screens/successfully_screen.dart';
-import 'package:at_your_home_partner/screens/upload_doc_screen.dart';
 import 'package:at_your_home_partner/service/api_logs.dart';
 import 'package:at_your_home_partner/service/api_service.dart';
 import 'package:image_picker/image_picker.dart';
@@ -191,7 +190,6 @@ class LoginController extends GetxController implements GetxService {
   Future<void> statesList() async {
     try {
       stateModel = null;
-      cityModel = null;
       stateList.clear();
       var result = await ApiService.statesList();
       var json = jsonDecode(result.body);

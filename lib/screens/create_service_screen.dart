@@ -408,6 +408,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                                 selectedItems: controller.selectedServiceList,
                                 onChanged: (selectedItems) {
                                   setState(() {
+                                    print(controller.selectedService.toString());
                                     controller.selectedServiceList.value = selectedItems;
                                   });
                                 },
@@ -824,8 +825,8 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
 
 class CustomMultiSelectDropdown extends StatelessWidget {
   final List<ServiceListModel> items;
-  final RxList<ServiceListModel> selectedItems;
-  final ValueChanged<List<ServiceListModel>> onChanged;
+  final List<String> selectedItems;
+  final ValueChanged<List<String>> onChanged;
   final AddServiceController controller;
 
   const CustomMultiSelectDropdown({
@@ -845,20 +846,24 @@ class CustomMultiSelectDropdown extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: borderColorCont),
+            border: Border.all(color: Colors.grey),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child: Obx(() => Text(
-                _buildSelectedItemsText(),
-                style: selectedItems.isEmpty
-                    ? const TextStyle(fontWeight: FontWeight.w400, color: Color.fromRGBO(166, 166, 166, 0.7), fontFamily: regular, fontSize: 14 , fontStyle: FontStyle.normal)
-                    : const TextStyle(
-                        fontFamily: regular,
-                        color: blackCl,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-              )),
+            _buildSelectedItemsText(),
+            style: selectedItems.isEmpty
+                ? const TextStyle(
+              fontWeight: FontWeight.w400,
+              color: Color.fromRGBO(166, 166, 166, 0.7),
+              fontSize: 14,
+              fontStyle: FontStyle.normal,
+            )
+                : const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          )),
         ),
       ),
     );
@@ -868,75 +873,87 @@ class CustomMultiSelectDropdown extends StatelessWidget {
     if (selectedItems.isEmpty) {
       return "Select Services";
     } else {
-      return selectedItems.map((item) => item.label.toString()).join(", ");
+      return selectedItems.join(", ");
     }
   }
 
   void _showMultiSelectDialog(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return AlertDialog(
-                title: const Text(
-                  "Select Services",
-                  style: TextStyle(
-                    fontFamily: regular,
-                    color: blackCl,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text(
+                "Select Services",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
-                backgroundColor: Colors.white,
-                surfaceTintColor: Colors.white,
-                content: Container(
+              ),
+              backgroundColor: Colors.white,
+              surfaceTintColor: Colors.white,
+              content: Obx(
+                    () => Container(
                   width: double.maxFinite,
                   decoration: const BoxDecoration(color: Colors.white),
-                  child: ListView(
+                  child: controller.isLoading.value
+                      ? const SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blue,
+                      ),
+                    ),
+                  )
+                      : ListView(
                     shrinkWrap: true,
                     children: items.map((item) {
-                      bool isSelected = selectedItems.contains(item);
+                      bool isSelected = selectedItems.contains(item.label);
                       return ListTile(
-                        title: Text(item.label.toString()),
-                        leading: isSelected ? const Icon(Icons.check_box) : const Icon(Icons.check_box_outline_blank),
+                        title: Text(item.label!),
+                        leading: isSelected
+                            ? const Icon(Icons.check_box)
+                            : const Icon(Icons.check_box_outline_blank),
                         onTap: () {
                           setState(() {
                             if (isSelected) {
                               controller.selectedService.remove(item.value.toString());
-                              controller.selectedServiceList.remove(item);
-                              selectedItems.remove(item);
+                              selectedItems.remove(item.label);
                             } else {
                               controller.selectedService.add(item.value.toString());
-                              controller.selectedServiceList.add(item);
-                              selectedItems.add(item);
+                              selectedItems.add(item.label!);
                             }
-                            onChanged(selectedItems.toList());
+                            onChanged(List.from(selectedItems));
                           });
                         },
                       );
                     }).toList(),
                   ),
                 ),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text(
-                      "Done",
-                      style: TextStyle(
-                        fontFamily: regular,
-                        color: blackCl,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text(
+                    "Done",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
                   ),
-                ],
-              );
-            },
-          );
-        });
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }
+

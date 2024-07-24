@@ -12,7 +12,7 @@ class PaymentHistoryController extends GetxController implements GetxService {
 
   Future<void> paymentHistoryGet() async {
     isLoading = true;
-   // try {
+    try {
       paymentHistoryList.clear();
       var result = await ApiService.paymentHistory();
       var json = jsonDecode(result.body);
@@ -23,10 +23,10 @@ class PaymentHistoryController extends GetxController implements GetxService {
         errorToast(json["status"].toString());
       }
       isLoading = false;
-  //  } catch (e) {
-   //   isLoading = false;
-   //   Log.console(e.toString());
-  //  }
+    } catch (e) {
+      isLoading = false;
+      Log.console(e.toString());
+    }
     update();
   }
 }

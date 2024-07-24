@@ -110,7 +110,9 @@ class _MyServiceScreenState extends State<MyServiceScreen> {
                             child: CustomButtonWidget(
                               padding: EdgeInsets.zero,
                               style: CustomButtonStyle.style3,
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.back();
+                              },
                               text: 'Go Home',
                             ),
                           ),
@@ -208,6 +210,32 @@ class _MyServiceScreenState extends State<MyServiceScreen> {
                       ),
                     ],
                   ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  decoration: BoxDecoration(color: appBar, borderRadius: BorderRadius.circular(4)),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.star,
+                        size: 12,
+                        color: Colors.yellow,
+                      ),
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                      Text(
+                        model.avgRating.toString(),
+                        style: TextStyle(
+                          color: whiteCl,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 12.sp,
+                          fontFamily: regular,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),
@@ -215,7 +243,7 @@ class _MyServiceScreenState extends State<MyServiceScreen> {
           SizedBox(height: 10.h),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Color(0xFFE0F6E5),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(10),
@@ -226,8 +254,8 @@ class _MyServiceScreenState extends State<MyServiceScreen> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: (){
-                     controller.serviceDeleteApi(model.id.toString());
+                    onTap: () {
+                      controller.serviceDeleteApi(model.id.toString());
                     },
                     child: SizedBox(
                       width: 156.w,
@@ -254,34 +282,62 @@ class _MyServiceScreenState extends State<MyServiceScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 22.w),
+                SizedBox(width: 5.w),
                 Expanded(
-                  child: SizedBox(
-                    height: 27.h,
-                    width: 156.w,
-                    child: CustomButtonWidget(
-                      radius: 40.dm,
-                      padding: EdgeInsets.zero,
-                      style: CustomButtonStyle.style2,
-                      onPressed: () {
-                        Get.to(()=>VendorDetailsScreen(serviceId: model.id.toString(), serviceTitle:  model.title.toString(), price:  model.price.toString()));
-                      },
-                      text: 'View Details',
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(() => VendorDetailsScreen(serviceId: model.id.toString(), serviceTitle: model.title.toString(), price: model.price.toString()));
+                    },
+                    child: Container(
+                      width: 156.w,
+                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(26),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color.fromRGBO(96, 175, 114, 1),
+                            Color.fromRGBO(38, 103, 52, 1),
+                          ],
+                        ),
+                        border: Border.all(color: mainColor),
+                      ),
+                      child: Text(
+                        "View Details",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 13.sp,
+                          fontFamily: semiBold,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(width: 22.w),
+                SizedBox(width: 15.w),
                 Expanded(
-                  child: SizedBox(
-                    height: 27.h,
-                    width: 156.w,
-                    child: CustomButtonWidget(
-                      padding: EdgeInsets.zero,
-                      style: CustomButtonStyle.style3,
-                      onPressed: () {
-                        Get.to(()=>ServiceBookingScreen(serviceId: model.id.toString(), serviceTitle:  model.title.toString(), price:  model.price.toString()));
-                      },
-                      text: 'My Booking',
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(() => ServiceBookingScreen(serviceId: model.id.toString(), serviceTitle: model.title.toString(), price: model.price.toString()));
+                    },
+                    child: Container(
+                      width: 156.w,
+                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(26),
+                        color: Colors.white,
+                        border: Border.all(color: mainColor),
+                      ),
+                      child: Text(
+                        "My Booking",
+                        style: TextStyle(
+                          color: mainColor,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 13.sp,
+                          fontFamily: semiBold,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
                   ),
                 ),
